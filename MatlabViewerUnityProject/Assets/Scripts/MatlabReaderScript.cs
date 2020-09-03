@@ -15,6 +15,7 @@ public class MatlabReaderScript : MonoBehaviour
 
     // mesh components
     public GameObject vertexColorMeshPrefab;
+    public GameObject singelColorMeshPrefab; 
     public Material scatterMat;
     private GameObject multicolorFV;
     private List<Color[]> vertexColorList;
@@ -57,7 +58,7 @@ public class MatlabReaderScript : MonoBehaviour
             switch (_type[0, 0])
             {
                 case 1: // type 1 = FV triangulated mesh
-                    FVmesh(_struct);
+                    FVmeshVertexColor(_struct);
                     break;
                 case 2:
                     // type 2 = 3D scatter
@@ -71,7 +72,16 @@ public class MatlabReaderScript : MonoBehaviour
                     // inset graph;
                     drawGraph(_struct);
                     break;
-                    // should add options for multigraph
+                // should add options for multigraph
+                case 5:
+                    // single color mesh
+                    FVmeshSingleColor(_struct);
+                    break;
+                case 6:
+                    // set camera distance
+                    CamDistSetter(_struct);
+                    break;
+
             }
         }
     }
@@ -92,7 +102,8 @@ public class MatlabReaderScript : MonoBehaviour
         fileSelectionDropDown.ItemsToDisplay = _fileList.Count;
     }
 
-    private void FVmesh(MatNode fv)
+
+    private void FVmeshVertexColor(MatNode fv)
     {
         Vector3[] vertices = MatrixToVectorArray(fv.Fields["vertices"].GetValue<double[,]>());
         int[] faces = MatrixTo1DArray(fv.Fields["faces"].GetValue<int[,]>());
@@ -109,28 +120,38 @@ public class MatlabReaderScript : MonoBehaviour
         GameObject meshInstance = Instantiate(vertexColorMeshPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         meshInstance.transform.parent = transform;
 
-        if (col.GetLength(0) == vertices.GetLength(0))
-        {
-            UnityEngine.Gradient colMap = MatrixToColormap(fv.Fields["map"].GetValue<double[,]>());
-            Color[] vertexColors = GetVertexColors(col, colMap, 0);
-            _mesh.colors = vertexColors;
+        UnityEngine.Gradient colMap = MatrixToColormap(fv.Fields["map"].GetValue<double[,]>());
+        Color[] vertexColors = GetVertexColors(col, colMap, 0);
+        _mesh.colors = vertexColors;
 
-        }
-        else
-        {
-            if (col.GetLength(0) == 1 && col.GetLength(1) == 3)
-            {
-                Color color = GetColor(col);
-            }
-            else
-            {
-                Color color = new Color(0, 0, 1, 1);
-            }
-        }
         meshInstance.GetComponent<MeshFilter>().mesh = _mesh;
 
         double[,] _opacity = fv.Fields["opacity"].GetValue<double[,]>();
         meshInstance.GetComponent<Renderer>().material.SetFloat("Vector1_2E70370B", (float)_opacity[0, 0]);
+    }
+
+    private void FVmeshSingleColor(MatNode fv)
+    {
+        Vector3[] vertices = MatrixToVectorArray(fv.Fields["vertices"].GetValue<double[,]>());
+        int[] faces = MatrixTo1DArray(fv.Fields["faces"].GetValue<int[,]>());
+
+        Color color = GetColor(fv.Fields["color"].GetValue<double[,]>());
+
+        _mesh = new Mesh();
+        _mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+        _mesh.vertices = vertices;
+        _mesh.triangles = faces;
+        _mesh.RecalculateNormals();
+
+        //GameObject meshInstance = new GameObject();
+        GameObject meshInstance = Instantiate(singelColorMeshPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        meshInstance.transform.parent = transform;
+
+        meshInstance.GetComponent<MeshFilter>().mesh = _mesh;
+
+        double[,] _opacity = fv.Fields["opacity"].GetValue<double[,]>();
+        meshInstance.GetComponent<Renderer>().material.SetFloat("Vector1_2E70370B", (float)_opacity[0, 0]);
+        meshInstance.GetComponent<Renderer>().material.SetColor("Color_6EC9804B", color);
     }
 
     private void FVmeshMultiVertColor(MatNode fv)
@@ -223,7 +244,7 @@ public class MatlabReaderScript : MonoBehaviour
             _graphXvalues.Add(x);
             _graphYvalues.Add(y);
         }
-    } 
+    }
 
     public void UpdateGraph()
     {
@@ -236,6 +257,13 @@ public class MatlabReaderScript : MonoBehaviour
         }
     }
 
+    private void CamDistSetter(MatNode d)
+    {
+        int[,] _dist = d.Fields["CamDistance"].GetValue<int[,]>();
+        CamOrbit.functions.SetCamDistance(_dist[0,0]);
+    }
+
+    // data reader functions
     private Vector3[] MatrixToVectorArray(double[,] matrix)
     {
         int rowCount = matrix.GetLength(0);
@@ -243,7 +271,7 @@ public class MatlabReaderScript : MonoBehaviour
         Vector3 temp = new Vector3(0, 0, 0);
         for (int i = 0; i < rowCount; i++)
         {
-            temp.x = (float)matrix[i, 0];
+            temp.x = -1*(float)matrix[i, 0];    //matlab and Unity are using different axis handedness
             temp.y = (float)matrix[i, 1];
             temp.z = (float)matrix[i, 2];
             arr[i] = temp;
@@ -315,6 +343,7 @@ public class MatlabReaderScript : MonoBehaviour
         return _color;
     }
 
+    // build and destroy functions
     private void DestroyAllChildren()
     {
         foreach (Transform child in transform)

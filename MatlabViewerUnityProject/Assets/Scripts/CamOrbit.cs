@@ -3,6 +3,8 @@ using System.Collections;
 
 public class CamOrbit : MonoBehaviour
 {
+    public static CamOrbit functions; //gives access to non static functions from other
+
     private Transform _XForm_Camera;
     private Transform _XForm_Parent;
 
@@ -25,6 +27,8 @@ public class CamOrbit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        functions = this; //gives access to non static functions from other
+
         _CameraDistance = _CameraDistanceDefault;
         _XForm_Camera = transform;
         _XForm_Parent = transform.parent;
@@ -92,13 +96,13 @@ public class CamOrbit : MonoBehaviour
     public void toggleCamOrbit()
     {
         CameraDisabled = !CameraDisabled;
-        PanDisabled = true; 
+        PanDisabled = true;
     }
 
     public void togglePan()
     {
         PanDisabled = !PanDisabled;
-        CameraDisabled = true; 
+        CameraDisabled = true;
     }
 
     public void RestView()
@@ -109,6 +113,13 @@ public class CamOrbit : MonoBehaviour
         _XForm_Parent.position = new Vector3(0, 0, 0);
         _XForm_Parent.rotation = Quaternion.Euler(_LocalRotation);
 
+        _XForm_Camera.localPosition = new Vector3(0f, 0f, _CameraDistance);
+    }
+
+    public void SetCamDistance(int setDistance)
+    {
+        _CameraDistanceDefault = setDistance; 
+        _CameraDistance = _CameraDistanceDefault;
         _XForm_Camera.localPosition = new Vector3(0f, 0f, _CameraDistance);
     }
 }

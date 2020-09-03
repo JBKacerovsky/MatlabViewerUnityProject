@@ -56,6 +56,8 @@ ScriptsOnlyBuild:
     - UnityEngine.Rendering.HighDefinition.VisualEnvironment
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
+    Unity.ShaderGraph.Editor.dll:
+    - UnityEditor.Graphing.GraphObject
     Unity.TextMeshPro.dll:
     - TMPro.TMP_FontAsset
     - TMPro.TMP_Settings
@@ -196,41 +198,41 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 15950}
     - Class: 114
-      Script: {instanceID: 16250}
+      Script: {instanceID: 16252}
     - Class: 114
-      Script: {instanceID: 16392}
+      Script: {instanceID: 16394}
     - Class: 114
-      Script: {instanceID: 16484}
+      Script: {instanceID: 16486}
     - Class: 114
-      Script: {instanceID: 16878}
+      Script: {instanceID: 16880}
     - Class: 114
-      Script: {instanceID: 16938}
+      Script: {instanceID: 16940}
     - Class: 114
-      Script: {instanceID: 17098}
+      Script: {instanceID: 17100}
     - Class: 114
-      Script: {instanceID: 17120}
+      Script: {instanceID: 17122}
     - Class: 114
-      Script: {instanceID: 17170}
-    - Class: 114
-      Script: {instanceID: 17502}
+      Script: {instanceID: 17172}
     - Class: 114
       Script: {instanceID: 17504}
     - Class: 114
       Script: {instanceID: 17506}
     - Class: 114
-      Script: {instanceID: 17512}
+      Script: {instanceID: 17508}
     - Class: 114
-      Script: {instanceID: 17552}
+      Script: {instanceID: 17514}
     - Class: 114
-      Script: {instanceID: 17562}
+      Script: {instanceID: 17554}
     - Class: 114
-      Script: {instanceID: 17596}
+      Script: {instanceID: 17564}
     - Class: 114
-      Script: {instanceID: 17650}
+      Script: {instanceID: 17598}
     - Class: 114
-      Script: {instanceID: 17788}
+      Script: {instanceID: 17652}
     - Class: 114
-      Script: {instanceID: 17796}
+      Script: {instanceID: 17790}
+    - Class: 114
+      Script: {instanceID: 17798}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1654,6 +1656,12 @@ ScriptsOnlyBuild:
     className: CurvedText
   - hash:
       serializedVersion: 2
+      Hash: 4186f0c4b8e13e99cf8c48c42081bb2a
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: DropDownTest
+  - hash:
+      serializedVersion: 2
       Hash: e4aac510b698bae77a5dbde189fe88e5
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
@@ -1876,7 +1884,7 @@ ScriptsOnlyBuild:
     className: DebugUIHandlerEnumHistory
   - hash:
       serializedVersion: 2
-      Hash: 128819bdeefe8cdb21c4703857e78000
+      Hash: 21ae76b6b9e17a51b740e75bd39941d8
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: MatlabReaderScript
@@ -2198,13 +2206,7 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualEffectGraph.Runtime.dll
     namespaceName: UnityEngine.VFX.Utility
     className: VFXUISliderBinder
-  - hash:
-      serializedVersion: 2
-      Hash: 4186f0c4b8e13e99cf8c48c42081bb2a
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: DropDownTest
   platform: 2
   scenePathNames:
   - Assets/matViewer.unity
-  playerPath: /Users/johanneskacerovsky/Documents/GitHub/MATLAB_scripts/XFigureViewer/MatLabViewer.app
+  playerPath: /Users/johanneskacerovsky/Documents/GitHub/MatlabViewer/MatLabViewer_Mac.app

@@ -56,6 +56,8 @@ ScriptsOnlyBuild:
     - UnityEngine.Rendering.HighDefinition.VisualEnvironment
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
+    Unity.ShaderGraph.Editor.dll:
+    - UnityEditor.Graphing.GraphObject
     Unity.TextMeshPro.dll:
     - TMPro.TMP_FontAsset
     - TMPro.TMP_Settings
@@ -1882,7 +1884,7 @@ ScriptsOnlyBuild:
     className: DebugUIHandlerEnumHistory
   - hash:
       serializedVersion: 2
-      Hash: 128819bdeefe8cdb21c4703857e78000
+      Hash: 21ae76b6b9e17a51b740e75bd39941d8
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: MatlabReaderScript
@@ -2207,4 +2209,4 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/matViewer.unity
-  playerPath: /Users/johanneskacerovsky/Documents/GitHub/MatlabViewer/MatlabViewerUnityProject/MatLabViewer_Windows/MatlabViewer.exe
+  playerPath: /Users/johanneskacerovsky/Documents/GitHub/MatlabViewer/MatLabViewer_Windows/MatLabViewer_Windows/MatlabViewer.exe

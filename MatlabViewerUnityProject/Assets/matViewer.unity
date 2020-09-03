@@ -3711,6 +3711,7 @@ MonoBehaviour:
   SliderCanvas: {fileID: 899617681}
   fileSelectionDropDown: {fileID: 795681056}
   vertexColorMeshPrefab: {fileID: 3835904594346437316, guid: 85d4ce646e1c04034a18a15c08ee3907, type: 3}
+  singelColorMeshPrefab: {fileID: 3835904594346437316, guid: d5641ccca24d14ca2ac33b081be058d5, type: 3}
   scatterMat: {fileID: 2100000, guid: 881016f8cb6b84a6a9392eae2ead622a, type: 2}
   graphPrefab: {fileID: 1042434326287047648, guid: 3bf02dc4fa75f480b8766fee10b6653c, type: 3}
   graphContainer: {fileID: 1494045503}

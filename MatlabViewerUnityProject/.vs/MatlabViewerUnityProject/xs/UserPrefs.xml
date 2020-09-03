@@ -1,0 +1,15 @@
+﻿<Properties StartupConfiguration="{04AA0A81-A556-0C5C-AA94-D6C15F51F8C7}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/MatlabReaderScript.cs">
+    <Files>
+      <File FileName="Assets/Scripts/MatlabReaderScript.cs" Line="262" Column="67" />
+      <File FileName="Assets/Scripts/CamOrbit.cs" Line="118" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="36127fe5-5919-4a65-80f9-c6990b977f20" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
