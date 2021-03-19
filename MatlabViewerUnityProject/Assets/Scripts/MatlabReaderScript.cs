@@ -13,11 +13,15 @@ public class MatlabReaderScript : MonoBehaviour
     public AutoCompleteComboBox fileSelectionDropDown;
     private string[] _files;
 
+    // prefabs
+    [SerializeField] private GameObject _vertexColorMeshPrefab;
+    [SerializeField] private GameObject _opaqueVertexColorPrefab;
+    [SerializeField] private GameObject _singelColorMeshPrefab;
+    [SerializeField] private GameObject _opaqueSingleColorPrefab;
+
     // mesh components
-    public GameObject vertexColorMeshPrefab;
-    public GameObject singelColorMeshPrefab; 
-    public Material scatterMat;
-    private GameObject multicolorFV;
+    [SerializeField] private Material _scatterMat;
+    private GameObject _multicolorFV;
     private List<Color[]> vertexColorList;
     private Mesh _multicolorMesh;
     private Mesh _mesh;
@@ -116,18 +120,26 @@ public class MatlabReaderScript : MonoBehaviour
         _mesh.triangles = faces;
         _mesh.RecalculateNormals();
 
-        //GameObject meshInstance = new GameObject();
-        GameObject meshInstance = Instantiate(vertexColorMeshPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        meshInstance.transform.parent = transform;
-
         UnityEngine.Gradient colMap = MatrixToColormap(fv.Fields["map"].GetValue<double[,]>());
         Color[] vertexColors = GetVertexColors(col, colMap, 0);
         _mesh.colors = vertexColors;
 
+        GameObject meshInstance = new GameObject();
+        double[,] temp = fv.Fields["opacity"].GetValue<double[,]>();
+        float _opacity = (float)temp[0,0];
+
+        if (_opacity < 1)
+        {
+            meshInstance = Instantiate(_vertexColorMeshPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+            meshInstance.GetComponent<Renderer>().material.SetFloat("Vector1_2E70370B", _opacity);
+        } else
+        {
+            meshInstance = Instantiate(_opaqueVertexColorPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        }
+
+        meshInstance.transform.parent = transform;
         meshInstance.GetComponent<MeshFilter>().mesh = _mesh;
 
-        double[,] _opacity = fv.Fields["opacity"].GetValue<double[,]>();
-        meshInstance.GetComponent<Renderer>().material.SetFloat("Vector1_2E70370B", (float)_opacity[0, 0]);
     }
 
     private void FVmeshSingleColor(MatNode fv)
@@ -144,14 +156,23 @@ public class MatlabReaderScript : MonoBehaviour
         _mesh.RecalculateNormals();
 
         //GameObject meshInstance = new GameObject();
-        GameObject meshInstance = Instantiate(singelColorMeshPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        double[,] temp = fv.Fields["opacity"].GetValue<double[,]>();
+        float _opacity = (float)temp[0, 0];
+
+        GameObject meshInstance = new GameObject();
+
+        if (_opacity < 1f)
+        {
+            meshInstance = Instantiate(_singelColorMeshPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+            meshInstance.GetComponent<Renderer>().material.SetFloat("Vector1_2E70370B", _opacity);
+        } else
+        {
+            meshInstance = Instantiate(_opaqueSingleColorPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        }
+
+        meshInstance.GetComponent<Renderer>().material.SetColor("_color", color);
         meshInstance.transform.parent = transform;
-
         meshInstance.GetComponent<MeshFilter>().mesh = _mesh;
-
-        double[,] _opacity = fv.Fields["opacity"].GetValue<double[,]>();
-        meshInstance.GetComponent<Renderer>().material.SetFloat("Vector1_2E70370B", (float)_opacity[0, 0]);
-        meshInstance.GetComponent<Renderer>().material.SetColor("Color_6EC9804B", color);
     }
 
     private void FVmeshMultiVertColor(MatNode fv)
@@ -170,8 +191,8 @@ public class MatlabReaderScript : MonoBehaviour
         _multicolorMesh.RecalculateNormals();
 
         //GameObject meshInstance = new GameObject();
-        multicolorFV = Instantiate(vertexColorMeshPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        multicolorFV.transform.parent = transform;
+        _multicolorFV = Instantiate(_vertexColorMeshPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        _multicolorFV.transform.parent = transform;
 
         slider.maxValue = col.GetLength(1) - 1;
         slider.value = 0;
@@ -187,10 +208,10 @@ public class MatlabReaderScript : MonoBehaviour
 
         _multicolorMesh.colors = vertexColorList[0];
 
-        multicolorFV.GetComponent<MeshFilter>().mesh = _multicolorMesh;
+        _multicolorFV.GetComponent<MeshFilter>().mesh = _multicolorMesh;
 
         double[,] _opacity = fv.Fields["opacity"].GetValue<double[,]>();
-        multicolorFV.GetComponent<Renderer>().material.SetFloat("Vector1_2E70370B", (float)_opacity[0, 0]);
+        _multicolorFV.GetComponent<Renderer>().material.SetFloat("Vector1_2E70370B", (float)_opacity[0, 0]);
     }
 
     public void UpdateVertexColors()
@@ -198,7 +219,7 @@ public class MatlabReaderScript : MonoBehaviour
         int tab = (int)slider.value;
 
         _multicolorMesh.colors = vertexColorList[tab];
-        multicolorFV.GetComponent<MeshFilter>().mesh = _multicolorMesh;
+        _multicolorFV.GetComponent<MeshFilter>().mesh = _multicolorMesh;
     }
 
     private void scatter3(MatNode sc)
@@ -216,8 +237,8 @@ public class MatlabReaderScript : MonoBehaviour
             GameObject sp = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             sp.transform.position = pts[i];
             sp.transform.localScale = new Vector3(sz[0, i], sz[0, i], sz[0, i]);
-            sp.GetComponent<Renderer>().material = scatterMat;
-            sp.GetComponent<Renderer>().material.shader = Shader.Find("HDRP/Lit");
+            sp.GetComponent<Renderer>().material = _scatterMat;
+            //sp.GetComponent<Renderer>().material.shader = Shader.Find("HDRP/Lit");
             sp.GetComponent<Renderer>().material.SetColor("_BaseColor", color);
             sp.transform.parent = scatterInstance.transform;
         }
