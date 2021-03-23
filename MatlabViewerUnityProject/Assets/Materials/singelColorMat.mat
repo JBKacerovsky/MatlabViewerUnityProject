@@ -22,7 +22,8 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - Vector1_2E70370B: 2.29
+    - Boolean_8EBF893: 1
+    - Vector1_2E70370B: 1
     - _Metallic: 0
     - _Opacity: 1
     - _smoothness: 0.5
