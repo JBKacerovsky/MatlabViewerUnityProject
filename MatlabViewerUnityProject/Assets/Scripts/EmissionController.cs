@@ -2,7 +2,7 @@
 
 public class EmissionController : MonoBehaviour
 {
-    [SerializeField] private bool _emission = false;
+    [SerializeField] private     bool _emission = false;
     private Material material; 
 
     void Start()

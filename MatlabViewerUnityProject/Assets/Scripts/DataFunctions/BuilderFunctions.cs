@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public static class BuilderFunctions 
 {
@@ -15,14 +13,23 @@ public static class BuilderFunctions
         return pointsArray;
     }
 
-    public static Mesh FVmesh(Vector3[] vertices, int[] faces)
+    public static GameObject FVmesh(Vector3[] vertices, int[] faces)
     {
+        GameObject meshInstance = new GameObject();
+        MeshCollider mc = meshInstance.AddComponent<MeshCollider>();
+        MeshFilter mf = meshInstance.AddComponent<MeshFilter>();
+        meshInstance.AddComponent<MeshRenderer>();
+        meshInstance.AddComponent<EmissionController>();
+
         Mesh mesh = new Mesh();
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
         mesh.vertices = vertices;
         mesh.triangles = faces;
         mesh.RecalculateNormals();
 
-        return mesh; 
+        mf.sharedMesh = mesh; //passing the mesh to the MeshFiltere so it can be displayed
+        mc.sharedMesh = mesh; //adding _mesh to MeshCollider so it can be hit by raycasts (and do other collider physics)
+
+        return meshInstance; 
     }
 }

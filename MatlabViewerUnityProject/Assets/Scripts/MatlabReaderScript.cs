@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Accord.IO;
-using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 using System.Collections.Generic;
 using System.IO;
@@ -8,49 +7,21 @@ using System.IO;
 public class MatlabReaderScript : MonoBehaviour
 {
     // UI components
-    public Slider slider;
-    public GameObject SliderCanvas;
     public AutoCompleteComboBox fileSelectionDropDown;
-    private string[] _files;
 
-    // prefabs
-    [SerializeField] private GameObject _vertexColorMeshPrefab;
-    [SerializeField] private GameObject _opaqueVertexColorPrefab;
-    [SerializeField] private GameObject _singelColorMeshPrefab;
-    [SerializeField] private GameObject _opaqueSingleColorPrefab;
-
-    // mesh components
+    // materials
+    [SerializeField] private Material _opaqueSingleColor;
+    [SerializeField] private Material _singleColor;
+    [SerializeField] private Material _opaqueVertexColors;
+    [SerializeField] private Material _vertexColors;
     [SerializeField] private Material _scatterMat;
-    private GameObject meshInstance; 
-    private GameObject _multicolorFV;
-    private List<Color[]> vertexColorList;
-    private Mesh _multicolorMesh;
-    private Mesh _mesh;
 
-    // graph components
-    public GameObject graphPrefab; 
-    public Transform graphContainer;    
-    private List<UILineRenderer> graphList;
-    private List<double[,]> _graphXvalues;
-    private List<double[,]> _graphYvalues;
-
-    void Start()
-    {
-        slider.maxValue = 0;
-
-        graphList = new List<UILineRenderer>();
-        _graphXvalues = new List<double[,]>();
-        _graphYvalues = new List<double[,]>();
-
-        UpdateFileList();
-        //UpdateMatlabFigure();
-    }
+    // containers for created objects
+    [SerializeField] private Transform multiMeshContainer;
+    [SerializeField] GameObject graphContainer; 
 
     public void UpdateMatlabFigure()
     {
-        DestroyAllChildren();
-        SliderCanvas.SetActive(false);
-
         MatReader matFileReader = new MatReader(Application.streamingAssetsPath + Path.DirectorySeparatorChar + fileSelectionDropDown.Text);
 
         MatNode matFile = matFileReader.Fields[matFileReader.FieldNames[0]];
@@ -90,125 +61,41 @@ public class MatlabReaderScript : MonoBehaviour
         }
     }
 
-    public void UpdateFileList()
-    {
-        _files = Directory.GetFiles(Application.streamingAssetsPath, "*.mat");
-
-        List<string> _fileList = new List<string>();
-
-        for (int i = 0; i < _files.Length; i++)
-        {
-            string[] temp = _files[i].Split(Path.DirectorySeparatorChar);
-            _fileList.Add(temp[temp.Length - 1]);
-        }
-
-        fileSelectionDropDown.SetAvailableOptions(_fileList);
-        fileSelectionDropDown.ItemsToDisplay = _fileList.Count;
-    }
-
-
-    private void FVmeshVertexColor(MatNode fv)
-    {
-        Vector3[] vertices = DataParser.MatrixToVectorArray(fv.Fields["vertices"].GetValue<double[,]>());
-        int[] faces = DataParser.MatrixTo1DArray(fv.Fields["faces"].GetValue<int[,]>());
-
-        double[,] col = fv.Fields["colors"].GetValue<double[,]>();
-
-        Color[] vertexColors = ColorParser.GetVertexColorList(col, fv.Fields["map"].GetValue<double[,]>())[0];
-
-
-        _mesh = BuilderFunctions.FVmesh(vertices, faces);
-
-        _mesh.colors = vertexColors;
-
-        double[,] temp = fv.Fields["opacity"].GetValue<double[,]>();
-        float _opacity = (float)temp[0,0];
-
-        if (_opacity < 1)
-        {
-            meshInstance = Instantiate(_vertexColorMeshPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-            meshInstance.GetComponent<Renderer>().material.SetFloat("_opacity", _opacity);
-        } else
-        {
-            meshInstance = Instantiate(_opaqueVertexColorPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        }
-
-        meshInstance.transform.parent = transform;
-        meshInstance.GetComponent<MeshFilter>().mesh = _mesh; //passing the mesh to the MeshFiltere so it can be displayed
-        meshInstance.GetComponent<MeshCollider>().sharedMesh = _mesh; //adding _mesh to MeshCollider so it can be hit by raycasts (and do other collider physics)
-
-    }
-
     private void FVmeshSingleColor(MatNode fv)
     {
-        Vector3[] vertices = DataParser.MatrixToVectorArray(fv.Fields["vertices"].GetValue<double[,]>());
-        int[] faces = DataParser.MatrixTo1DArray(fv.Fields["faces"].GetValue<int[,]>());
-
-        Color color = ColorParser.GetColor(fv.Fields["color"].GetValue<double[,]>());
-
-        _mesh = BuilderFunctions.FVmesh(vertices, faces);
+        GameObject meshInstance = InstantiateMesh(fv, transform);
 
         double[,] temp = fv.Fields["opacity"].GetValue<double[,]>();
         float _opacity = (float)temp[0, 0];
 
         if (_opacity < 1f)
         {
-            meshInstance = Instantiate(_singelColorMeshPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-            meshInstance.GetComponent<Renderer>().material.SetFloat("_opacity", _opacity);
-        } else
+            meshInstance.GetComponent<MeshRenderer>().material = _singleColor;
+            meshInstance.GetComponent<MeshRenderer>().material.SetFloat("_opacity", _opacity);
+        }
+        else
         {
-            meshInstance = Instantiate(_opaqueSingleColorPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+            meshInstance.GetComponent<MeshRenderer>().material = _opaqueSingleColor;
         }
 
-        meshInstance.GetComponent<Renderer>().material.SetColor("_color", color);
-        meshInstance.transform.parent = transform;
-        meshInstance.GetComponent<MeshFilter>().mesh = _mesh;
-        meshInstance.GetComponent<MeshCollider>().sharedMesh = _mesh; 
+        Color color = ColorParser.GetColor(fv.Fields["color"].GetValue<double[,]>());
+        meshInstance.GetComponent<MeshRenderer>().material.SetColor("_color", color);
+    }
+
+    private void FVmeshVertexColor(MatNode fv)
+    {
+        GameObject meshInstance = InstantiateMesh(fv, transform);
+
+        AddVertexColors(fv, meshInstance);
     }
 
     private void FVmeshMultiVertColor(MatNode fv)
     {
-        SliderCanvas.SetActive(true);
+        GameObject _multicolorFV = InstantiateMesh(fv, multiMeshContainer);
 
-        Vector3[] vertices = DataParser.MatrixToVectorArray(fv.Fields["vertices"].GetValue<double[,]>());
-        int[] faces = DataParser.MatrixTo1DArray(fv.Fields["faces"].GetValue<int[,]>());
+        List<Color[]> _multiVertColorList = AddVertexColors(fv, _multicolorFV);
 
-        double[,] col = fv.Fields["colors"].GetValue<double[,]>();
-
-        _multicolorMesh = BuilderFunctions.FVmesh(vertices, faces);
-
-        slider.maxValue = col.GetLength(1) - 1;
-        slider.value = 0;
-
-        vertexColorList = ColorParser.GetVertexColorList(col, fv.Fields["map"].GetValue<double[,]>());
-
-        _multicolorMesh.colors = vertexColorList[0];
-
-        double[,] temp = fv.Fields["opacity"].GetValue<double[,]>();
-        float _opacity = (float)temp[0, 0];
-
-        if (_opacity < 1)
-        {
-            _multicolorFV = Instantiate(_vertexColorMeshPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-            _multicolorFV.GetComponent<Renderer>().material.SetFloat("_opacity", _opacity);
-        }
-        else
-        {
-            _multicolorFV = Instantiate(_opaqueVertexColorPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        }
-
-        _multicolorFV.transform.parent = transform;
-        _multicolorFV.GetComponent<MeshFilter>().mesh = _multicolorMesh;
-        _multicolorFV.GetComponent<MeshCollider>().sharedMesh = _multicolorMesh;
-
-    }
-
-    public void UpdateVertexColors()
-    {
-        int tab = (int)slider.value;
-
-        _multicolorMesh.colors = vertexColorList[tab];
-        _multicolorFV.GetComponent<MeshFilter>().mesh = _multicolorMesh;
+        multiMeshContainer.GetComponent<MultiVertColUpdater>().SetStuff(_multiVertColorList, _multicolorFV); 
     }
 
     private void scatter3(MatNode sc)
@@ -234,37 +121,12 @@ public class MatlabReaderScript : MonoBehaviour
 
     private void drawGraph(MatNode gr)
     {
-        GameObject _graph = Instantiate(graphPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        _graph.transform.SetParent(graphContainer, false);
-        UILineRenderer uILineRenderer = _graph.GetComponent <UILineRenderer>();
-
         Color color = ColorParser.GetColor(gr.Fields["color"].GetValue<double[,]>());
 
         double[,] x = gr.Fields["x"].GetValue<double[,]>();
         double[,] y = gr.Fields["y"].GetValue<double[,]>();
 
-        Vector2[] points = BuilderFunctions.buildPointsArray(x, y, 0);
-
-        uILineRenderer.color = color;
-        uILineRenderer.Points = points;
-
-        if (y.GetLength(1) > 1) // if graph has more than 1 set of y values it becomes scrollable
-        {
-            graphList.Add(uILineRenderer);
-            _graphXvalues.Add(x);
-            _graphYvalues.Add(y);
-        }
-    }
-
-    public void UpdateGraph()
-    {
-        int idx = (int)slider.value;
-
-        for (int i = 0; i < graphList.Count; i++)
-        {
-            Vector2[] points = BuilderFunctions.buildPointsArray(_graphXvalues[i], _graphYvalues[i], idx);
-            graphList[i].Points = points; 
-        }
+        graphContainer.GetComponent<GraphController>().BuildGraph(x, y, color); 
     }
 
     private void CamDistSetter(MatNode d)
@@ -274,20 +136,37 @@ public class MatlabReaderScript : MonoBehaviour
     }
 
     // build and destroy functions
-    private void DestroyAllChildren()
+    private GameObject InstantiateMesh(MatNode fv, Transform targetTransform)
     {
-        foreach (Transform child in transform)
+        Vector3[] vertices = DataParser.MatrixToVectorArray(fv.Fields["vertices"].GetValue<double[,]>());
+        int[] faces = DataParser.MatrixTo1DArray(fv.Fields["faces"].GetValue<int[,]>());
+
+        GameObject meshInstance = BuilderFunctions.FVmesh(vertices, faces);
+
+        meshInstance.transform.parent = targetTransform;
+
+        return meshInstance; 
+    }
+
+    private List<Color[]> AddVertexColors(MatNode fv, GameObject meshInstance)
+    {
+        double[,] temp = fv.Fields["opacity"].GetValue<double[,]>();
+        float _opacity = (float)temp[0, 0];
+
+        if (_opacity < 1)
         {
-            GameObject.Destroy(child.gameObject);
+            meshInstance.GetComponent<MeshRenderer>().material = _vertexColors;
+            meshInstance.GetComponent<MeshRenderer>().material.SetFloat("_opacity", _opacity);
+        }
+        else
+        {
+            meshInstance.GetComponent<MeshRenderer>().material = _opaqueVertexColors;
         }
 
-        foreach (Transform child in graphContainer.transform)
-        {
-            GameObject.Destroy(child.gameObject);
-        }
+        double[,] col = fv.Fields["colors"].GetValue<double[,]>();
+        List<Color[]> vertexColorList = ColorParser.GetVertexColorList(col, fv.Fields["map"].GetValue<double[,]>());
+        meshInstance.GetComponent<MeshFilter>().mesh.colors = vertexColorList[0];
 
-        graphList.Clear();
-        _graphXvalues.Clear();
-        _graphYvalues.Clear();
+        return vertexColorList;
     }
 }

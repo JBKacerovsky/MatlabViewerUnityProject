@@ -20,16 +20,10 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - Boolean_EE7D08D: 0
-    - Vector1_2E70370B: 1
-    - _Metallic: 0
-    - _Opacity: 1
     - _emissionToggle: 1
     - _metallic: 0
     - _opacity: 1
     - _smoothness: 0.5
     m_Colors:
-    - Color_6EC9804B: {r: 0.20271248, g: 0, b: 1, a: 0}
-    - Vector3_9A1F418B: {r: 0, g: 0, b: 1, a: 0}
     - _color: {r: 0.20271248, g: 0, b: 1, a: 0}
   m_BuildTextureStacks: []

@@ -65,7 +65,12 @@
     <Compile Include="Assets/Scripts/CamOrbit.cs" />
     <Compile Include="Assets/Scripts/DataFunctions/DataParser.cs" />
     <Compile Include="Assets/Scripts/DataFunctions/ColorParser.cs" />
-    <Compile Include="Assets/Scripts/DataFunctions/Builderfunctions.cs" />
+    <Compile Include="Assets/Scripts/DataFunctions/BuilderFunctions.cs" />
+    <Compile Include="Assets/Scripts/FileListUpdater.cs" />
+    <Compile Include="Assets/Scripts/Destroyer.cs" />
+    <Compile Include="Assets/Scripts/GraphController.cs" />
+    <Compile Include="Assets/Scripts/MultiVertColUpdater.cs" />
+    <Compile Include="Assets/Scripts/UpdateManger.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets/TextMesh Pro/Resources/Shaders/TMPro.cginc" />
