@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using Accord.IO;
 using UnityEngine.UI.Extensions;
 using System.Collections.Generic;
 using System.IO;
+using Accord.IO;
 
 public class MatlabReaderScript : MonoBehaviour
 {
@@ -18,7 +18,23 @@ public class MatlabReaderScript : MonoBehaviour
 
     // containers for created objects
     [SerializeField] private Transform multiMeshContainer;
-    [SerializeField] GameObject graphContainer; 
+    [SerializeField] GameObject graphContainer;
+
+    // Dictionary of matlab types to be displayed
+    private Dictionary<int, System.Action<MatNode>> _matTypes;
+
+    void Start()
+    {
+        _matTypes = new Dictionary<int, System.Action<MatNode>>
+        {
+            {1, FVmeshVertexColor},
+            {2, scatter3},
+            {3, FVmeshMultiVertColor},
+            {4, drawGraph},
+            {5, FVmeshSingleColor},
+            {6, CamDistSetter}
+        };
+    }
 
     public void UpdateMatlabFigure()
     {
@@ -29,57 +45,18 @@ public class MatlabReaderScript : MonoBehaviour
         foreach (var field in matFile.Fields)
         {
             MatNode _struct = matFile.Fields[field.Key];
-            int[,] _type = _struct.Fields["type"].GetValue<int[,]>();
+            int _type = _struct.Fields["type"].GetValue<int[,]>()[0, 0];
 
-            switch (_type[0, 0])
-            {
-                case 1: // type 1 = FV triangulated mesh
-                    FVmeshVertexColor(_struct);
-                    break;
-                case 2:
-                    // type 2 = 3D scatter
-                    scatter3(_struct);
-                    break;
-                case 3:
-                    // multiple vertex color mesh
-                    FVmeshMultiVertColor(_struct);
-                    break;
-                case 4:
-                    // inset graph;
-                    drawGraph(_struct);
-                    break;
-                // should add options for multigraph
-                case 5:
-                    // single color mesh
-                    FVmeshSingleColor(_struct);
-                    break;
-                case 6:
-                    // set camera distance
-                    CamDistSetter(_struct);
-                    break;
-            }
+            _matTypes[_type](_struct); 
         }
     }
 
+    // matType Functions
     private void FVmeshSingleColor(MatNode fv)
     {
         GameObject meshInstance = InstantiateMesh(fv, transform);
 
-        double[,] temp = fv.Fields["opacity"].GetValue<double[,]>();
-        float _opacity = (float)temp[0, 0];
-
-        if (_opacity < 1f)
-        {
-            meshInstance.GetComponent<MeshRenderer>().material = _singleColor;
-            meshInstance.GetComponent<MeshRenderer>().material.SetFloat("_opacity", _opacity);
-        }
-        else
-        {
-            meshInstance.GetComponent<MeshRenderer>().material = _opaqueSingleColor;
-        }
-
-        Color color = ColorParser.GetColor(fv.Fields["color"].GetValue<double[,]>());
-        meshInstance.GetComponent<MeshRenderer>().material.SetColor("_color", color);
+        AddColor(fv, meshInstance);
     }
 
     private void FVmeshVertexColor(MatNode fv)
@@ -148,6 +125,25 @@ public class MatlabReaderScript : MonoBehaviour
         return meshInstance; 
     }
 
+    private void AddColor(MatNode fv, GameObject meshInstance)
+    {
+        double[,] temp = fv.Fields["opacity"].GetValue<double[,]>();
+        float _opacity = (float)temp[0, 0];
+
+        if (_opacity < 1f)
+        {
+            meshInstance.GetComponent<MeshRenderer>().material = _singleColor;
+            meshInstance.GetComponent<MeshRenderer>().material.SetFloat("_opacity", _opacity);
+        }
+        else
+        {
+            meshInstance.GetComponent<MeshRenderer>().material = _opaqueSingleColor;
+        }
+
+        Color color = ColorParser.GetColor(fv.Fields["color"].GetValue<double[,]>());
+        meshInstance.GetComponent<MeshRenderer>().material.SetColor("_color", color);
+    }
+        
     private List<Color[]> AddVertexColors(MatNode fv, GameObject meshInstance)
     {
         double[,] temp = fv.Fields["opacity"].GetValue<double[,]>();
@@ -165,6 +161,7 @@ public class MatlabReaderScript : MonoBehaviour
 
         double[,] col = fv.Fields["colors"].GetValue<double[,]>();
         List<Color[]> vertexColorList = ColorParser.GetVertexColorList(col, fv.Fields["map"].GetValue<double[,]>());
+
         meshInstance.GetComponent<MeshFilter>().mesh.colors = vertexColorList[0];
 
         return vertexColorList;

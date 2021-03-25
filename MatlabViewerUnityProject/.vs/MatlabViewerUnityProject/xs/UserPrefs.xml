@@ -1,11 +1,11 @@
 ﻿<Properties StartupConfiguration="{04AA0A81-A556-0C5C-AA94-D6C15F51F8C7}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/UpdateManger.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/EmissionController.cs">
     <Files>
-      <File FileName="Assets/Scripts/MatlabReaderScript.cs" Line="24" Column="6" />
-      <File FileName="Assets/Scripts/UpdateManger.cs" Line="18" Column="1" />
-      <File FileName="Assets/Scripts/DataFunctions/BuilderFunctions.cs" Line="36" Column="1" NotebookId="1" />
-      <File FileName="Assets/Scripts/GraphController.cs" Line="11" Column="20" NotebookId="1" />
-      <File FileName="Assets/Scripts/MultiVertColUpdater.cs" Line="33" Column="6" NotebookId="1" />
+      <File FileName="Assets/Scripts/MatlabReaderScript.cs" Line="141" Column="10" />
+      <File FileName="Assets/Scripts/UpdateManger.cs" Line="23" Column="72" />
+      <File FileName="Assets/Scripts/DictTest.cs" Line="5" Column="2" />
+      <File FileName="Assets/Scripts/CamOrbit.cs" Line="42" Column="8" />
+      <File FileName="Assets/Scripts/EmissionController.cs" Line="10" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
