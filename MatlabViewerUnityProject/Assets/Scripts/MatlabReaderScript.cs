@@ -54,25 +54,29 @@ public class MatlabReaderScript : MonoBehaviour
     // matType Functions
     private void FVmeshSingleColor(MatNode fv)
     {
-        GameObject meshInstance = InstantiateMesh(fv, transform);
+        GameObject meshInstance = BuilderFunctions.InstantiateMesh(fv, transform);
 
-        AddColor(fv, meshInstance);
+        BuilderFunctions.AddColor(fv, meshInstance, _singleColor, _opaqueSingleColor);
     }
 
     private void FVmeshVertexColor(MatNode fv)
     {
-        GameObject meshInstance = InstantiateMesh(fv, transform);
+        GameObject meshInstance = BuilderFunctions.InstantiateMesh(fv, transform);
 
-        AddVertexColors(fv, meshInstance);
+        BuilderFunctions.AddColor(fv, meshInstance, _vertexColors, _opaqueVertexColors);
+
+        meshInstance.GetComponent<MeshFilter>().mesh.colors = BuilderFunctions.BuildVertColorList(fv)[0]; 
     }
 
     private void FVmeshMultiVertColor(MatNode fv)
     {
-        GameObject _multicolorFV = InstantiateMesh(fv, multiMeshContainer);
+        GameObject meshInstance = BuilderFunctions.InstantiateMesh(fv, multiMeshContainer);
 
-        List<Color[]> _multiVertColorList = AddVertexColors(fv, _multicolorFV);
+        List<Color[]> _multiVertColorList = BuilderFunctions.BuildVertColorList(fv);
 
-        multiMeshContainer.GetComponent<MultiVertColUpdater>().SetStuff(_multiVertColorList, _multicolorFV); 
+        meshInstance.GetComponent<MeshFilter>().mesh.colors = _multiVertColorList[0]; 
+
+        multiMeshContainer.GetComponent<MultiVertColUpdater>().SetStuff(_multiVertColorList, meshInstance); 
     }
 
     private void scatter3(MatNode sc)
@@ -110,60 +114,5 @@ public class MatlabReaderScript : MonoBehaviour
     {
         int[,] _dist = d.Fields["CamDistance"].GetValue<int[,]>();
         CamOrbit.functions.SetCamDistance(_dist[0,0]);
-    }
-
-    // build and destroy functions
-    private GameObject InstantiateMesh(MatNode fv, Transform targetTransform)
-    {
-        Vector3[] vertices = DataParser.MatrixToVectorArray(fv.Fields["vertices"].GetValue<double[,]>());
-        int[] faces = DataParser.MatrixTo1DArray(fv.Fields["faces"].GetValue<int[,]>());
-
-        GameObject meshInstance = BuilderFunctions.FVmesh(vertices, faces);
-
-        meshInstance.transform.parent = targetTransform;
-
-        return meshInstance; 
-    }
-
-    private void AddColor(MatNode fv, GameObject meshInstance)
-    {
-        double[,] temp = fv.Fields["opacity"].GetValue<double[,]>();
-        float _opacity = (float)temp[0, 0];
-
-        if (_opacity < 1f)
-        {
-            meshInstance.GetComponent<MeshRenderer>().material = _singleColor;
-            meshInstance.GetComponent<MeshRenderer>().material.SetFloat("_opacity", _opacity);
-        }
-        else
-        {
-            meshInstance.GetComponent<MeshRenderer>().material = _opaqueSingleColor;
-        }
-
-        Color color = ColorParser.GetColor(fv.Fields["color"].GetValue<double[,]>());
-        meshInstance.GetComponent<MeshRenderer>().material.SetColor("_color", color);
-    }
-        
-    private List<Color[]> AddVertexColors(MatNode fv, GameObject meshInstance)
-    {
-        double[,] temp = fv.Fields["opacity"].GetValue<double[,]>();
-        float _opacity = (float)temp[0, 0];
-
-        if (_opacity < 1)
-        {
-            meshInstance.GetComponent<MeshRenderer>().material = _vertexColors;
-            meshInstance.GetComponent<MeshRenderer>().material.SetFloat("_opacity", _opacity);
-        }
-        else
-        {
-            meshInstance.GetComponent<MeshRenderer>().material = _opaqueVertexColors;
-        }
-
-        double[,] col = fv.Fields["colors"].GetValue<double[,]>();
-        List<Color[]> vertexColorList = ColorParser.GetVertexColorList(col, fv.Fields["map"].GetValue<double[,]>());
-
-        meshInstance.GetComponent<MeshFilter>().mesh.colors = vertexColorList[0];
-
-        return vertexColorList;
     }
 }

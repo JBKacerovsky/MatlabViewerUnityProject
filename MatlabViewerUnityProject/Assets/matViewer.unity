@@ -1103,8 +1103,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1456518076}
-        m_TargetAssemblyTypeName: MatlabReaderScript, Assembly-CSharp
+      - m_Target: {fileID: 964927913}
+        m_TargetAssemblyTypeName: FileListUpdater, Assembly-CSharp
         m_MethodName: UpdateFileList
         m_Mode: 1
         m_Arguments:
@@ -1353,7 +1353,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &408533404
 GameObject:
@@ -1430,6 +1430,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 408533404}
   m_CullTransparentMesh: 0
+--- !u!1 &416277922
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 416277923}
+  - component: {fileID: 416277924}
+  m_Layer: 0
+  m_Name: MultiColorVertMesh
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &416277923
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416277922}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 505, y: 375.85645, z: 800}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &416277924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416277922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a30ec36cb070435f960e23ffaa72210, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slider: {fileID: 1577625390}
+  SliderCanvas: {fileID: 899617681}
 --- !u!1 &424454982
 GameObject:
   m_ObjectHideFlags: 0
@@ -2571,7 +2616,7 @@ RectTransform:
   - {fileID: 253416200}
   - {fileID: 424454983}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2683,13 +2728,57 @@ RectTransform:
   m_Children:
   - {fileID: 1577625389}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &964927912
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 964927914}
+  - component: {fileID: 964927913}
+  m_Layer: 0
+  m_Name: uiManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &964927913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 964927912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0685cd5551b8c49b2a6c9d5767bfcbb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fileSelectionDropDown: {fileID: 795681056}
+--- !u!4 &964927914
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 964927912}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 505, y: 375.85645, z: 800}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &980422643
 GameObject:
   m_ObjectHideFlags: 0
@@ -2903,9 +2992,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1456518076}
-        m_TargetAssemblyTypeName: matlabReadTest, Assembly-CSharp
-        m_MethodName: UpdateMatlabFigure
+      - m_Target: {fileID: 1638454487}
+        m_TargetAssemblyTypeName: UpdateManger, Assembly-CSharp
+        m_MethodName: UpdateButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3633,16 +3722,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 376d563eb15fe47a7a59d20a34744dba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slider: {fileID: 1577625390}
-  SliderCanvas: {fileID: 899617681}
   fileSelectionDropDown: {fileID: 795681056}
-  _vertexColorMeshPrefab: {fileID: 3835904594346437316, guid: 85d4ce646e1c04034a18a15c08ee3907, type: 3}
-  _opaqueVertexColorPrefab: {fileID: 3835904594346437316, guid: edef13aa570714f1ca82748da0cce438, type: 3}
-  _singelColorMeshPrefab: {fileID: 3835904594346437316, guid: d5641ccca24d14ca2ac33b081be058d5, type: 3}
-  _opaqueSingleColorPrefab: {fileID: 3835904594346437316, guid: 723953026ac9a493399ce2997ad0120c, type: 3}
+  _opaqueSingleColor: {fileID: 2100000, guid: a69e81080770c4532bb1a39b8a4c9ead, type: 2}
+  _singleColor: {fileID: 2100000, guid: 9dd30e2cfba694cda9f62b71b247a750, type: 2}
+  _opaqueVertexColors: {fileID: 2100000, guid: 70490e56b07634bb8a30ca6f87936432, type: 2}
+  _vertexColors: {fileID: 2100000, guid: c29b09bf1b13548dfbbe8b922648814c, type: 2}
   _scatterMat: {fileID: 2100000, guid: 881016f8cb6b84a6a9392eae2ead622a, type: 2}
-  graphPrefab: {fileID: 1042434326287047648, guid: 3bf02dc4fa75f480b8766fee10b6653c, type: 3}
-  graphContainer: {fileID: 1494045503}
+  multiMeshContainer: {fileID: 416277923}
+  graphContainer: {fileID: 1494045502}
 --- !u!4 &1456518077
 Transform:
   m_ObjectHideFlags: 0
@@ -3666,8 +3753,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1494045503}
+  - component: {fileID: 1494045504}
   m_Layer: 5
-  m_Name: GameObject
+  m_Name: GraphContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3692,6 +3780,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0.002319336, y: -0.00018310547}
   m_SizeDelta: {x: 0.6135864, y: -0.9609375}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1494045504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494045502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 100af0f6c257b4358976feddb8b6ed5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _graphPrefab: {fileID: 1042434326287047648, guid: 3bf02dc4fa75f480b8766fee10b6653c, type: 3}
+  slider: {fileID: 1577625390}
+  graphList: []
 --- !u!1 &1518322833
 GameObject:
   m_ObjectHideFlags: 0
@@ -3989,8 +4092,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1456518076}
-        m_TargetAssemblyTypeName: matlabReadTest, Assembly-CSharp
+      - m_Target: {fileID: 416277924}
+        m_TargetAssemblyTypeName: MultiVertColUpdater, Assembly-CSharp
         m_MethodName: UpdateVertexColors
         m_Mode: 1
         m_Arguments:
@@ -4001,8 +4104,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1456518076}
-        m_TargetAssemblyTypeName: MatlabReaderScript, Assembly-CSharp
+      - m_Target: {fileID: 1494045504}
+        m_TargetAssemblyTypeName: GraphController, Assembly-CSharp
         m_MethodName: UpdateGraph
         m_Mode: 1
         m_Arguments:
@@ -4178,6 +4281,7 @@ GameObject:
   - component: {fileID: 1638454485}
   - component: {fileID: 1638454484}
   - component: {fileID: 1638454483}
+  - component: {fileID: 1638454487}
   m_Layer: 5
   m_Name: ButtonCanvas
   m_TagString: Untagged
@@ -4265,13 +4369,32 @@ RectTransform:
   - {fileID: 795681055}
   - {fileID: 297423220}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1638454487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1638454482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f2b2ed2dd86743b8a8dffb8b6313696, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Destruction:
+  - {fileID: 1456518077}
+  - {fileID: 416277923}
+  - {fileID: 1494045503}
+  ToUpdate: {fileID: 1456518075}
+  ToInactivate:
+  - {fileID: 899617681}
 --- !u!1 &1695769254
 GameObject:
   m_ObjectHideFlags: 0
@@ -4983,7 +5106,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 3.1415927
+  m_Intensity: 1.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208

@@ -3,6 +3,16 @@ using UnityEngine;
 
 public static class ColorParser
 {
+    public static Color GetColor(double[,] col)
+    {
+        Color _color = new Color(0, 0, 0);
+        _color.r = (float)col[0, 0];
+        _color.g = (float)col[0, 1];
+        _color.b = (float)col[0, 2];
+
+        return _color;
+    }
+
     public static Color[] BuildColorArray(double[,] vertCol, Gradient colMap)
     {
         Color[] colors = new Color[vertCol.GetLength(0)];
@@ -58,13 +68,4 @@ public static class ColorParser
         return (map);
     }
 
-    public static Color GetColor(double[,] col)
-    {
-        Color _color = new Color(0, 0, 0);
-        _color.r = (float)col[0, 0];
-        _color.g = (float)col[0, 1];
-        _color.b = (float)col[0, 2];
-
-        return _color;
-    }
 }

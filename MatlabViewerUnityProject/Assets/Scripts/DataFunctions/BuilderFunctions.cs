@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections.Generic; 
+using Accord.IO; 
 
 public static class BuilderFunctions 
 {
@@ -15,21 +17,57 @@ public static class BuilderFunctions
 
     public static GameObject FVmesh(Vector3[] vertices, int[] faces)
     {
-        GameObject meshInstance = new GameObject();
-        MeshCollider mc = meshInstance.AddComponent<MeshCollider>();
-        MeshFilter mf = meshInstance.AddComponent<MeshFilter>();
-        meshInstance.AddComponent<MeshRenderer>();
-        meshInstance.AddComponent<EmissionController>();
-
         Mesh mesh = new Mesh();
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
         mesh.vertices = vertices;
         mesh.triangles = faces;
         mesh.RecalculateNormals();
 
-        mf.sharedMesh = mesh; //passing the mesh to the MeshFiltere so it can be displayed
-        mc.sharedMesh = mesh; //adding _mesh to MeshCollider so it can be hit by raycasts (and do other collider physics)
-
+        GameObject meshInstance = new GameObject();
+        meshInstance.AddComponent<MeshRenderer>();
+        meshInstance.AddComponent<EmissionController>();
+        meshInstance.AddComponent<MeshFilter>().sharedMesh = mesh;  //passing the mesh to the MeshFiltere so it can be displayed
+        meshInstance.AddComponent<MeshCollider>().sharedMesh = mesh;  //adding _mesh to MeshCollider so it can be hit by raycasts (and do other collider physics)
+    
         return meshInstance; 
+    }
+
+    public static GameObject InstantiateMesh(MatNode fv, Transform targetTransform)
+    {
+        Vector3[] vertices = DataParser.MatrixToVectorArray(fv.Fields["vertices"].GetValue<double[,]>());
+        int[] faces = DataParser.MatrixTo1DArray(fv.Fields["faces"].GetValue<int[,]>());
+
+        GameObject meshInstance = BuilderFunctions.FVmesh(vertices, faces);
+
+        meshInstance.transform.parent = targetTransform;
+
+        return meshInstance;
+    }
+
+    public static void AddColor(MatNode fv, GameObject meshInstance, Material transparentMat, Material opaqueMat)
+    {
+        double[,] temp = fv.Fields["opacity"].GetValue<double[,]>();
+        float _opacity = (float)temp[0, 0];
+
+        if (_opacity < 1f)
+        {
+            meshInstance.GetComponent<MeshRenderer>().material = transparentMat;
+            meshInstance.GetComponent<MeshRenderer>().material.SetFloat("_opacity", _opacity);
+        }
+        else
+        {
+            meshInstance.GetComponent<MeshRenderer>().material = opaqueMat;
+        }
+
+        Color color = ColorParser.GetColor(fv.Fields["color"].GetValue<double[,]>());
+        meshInstance.GetComponent<MeshRenderer>().material.SetColor("_color", color);
+    }
+
+    public static List<Color[]> BuildVertColorList(MatNode fv)
+    {
+        double[,] col = fv.Fields["colors"].GetValue<double[,]>();
+        List<Color[]> vertexColorList = ColorParser.GetVertexColorList(col, fv.Fields["map"].GetValue<double[,]>());
+
+        return vertexColorList;
     }
 }

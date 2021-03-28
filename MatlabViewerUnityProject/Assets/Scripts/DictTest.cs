@@ -3,13 +3,11 @@ using UnityEngine;
 
 public class DictTest : MonoBehaviour
 {
-    private Dictionary<int, System.Action<int>> _test; 
-    // Start is called before the first frame update
-
+    private Dictionary<int, System.Action<int>> _test;
 
     void Start()
     {
-        _test = new Dictionary<int, System.Action<int>>()
+        _test = new Dictionary<int, System.Action<int>>
         {
             {1, Function1},
             {2, Function2}
