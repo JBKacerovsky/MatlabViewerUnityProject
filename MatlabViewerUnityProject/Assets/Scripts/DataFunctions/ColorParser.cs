@@ -12,7 +12,7 @@ public static class ColorParser
 
         return _color;
     }
-
+        
     public static Color[] BuildColorArray(double[,] vertCol, Gradient colMap)
     {
         Color[] colors = new Color[vertCol.GetLength(0)];

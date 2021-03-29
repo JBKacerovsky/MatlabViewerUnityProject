@@ -21,60 +21,92 @@ public class MatlabReaderScript : MonoBehaviour
     [SerializeField] GameObject graphContainer;
 
     // Dictionary of matlab types to be displayed
-    private Dictionary<int, System.Action<MatNode>> _matTypes;
+    private Dictionary<string, System.Action<MatNode>> _matTypes;
 
     void Start()
     {
-        _matTypes = new Dictionary<int, System.Action<MatNode>>
+        _matTypes = new Dictionary<string, System.Action<MatNode>>
         {
-            {1, FVmeshVertexColor},
-            {2, scatter3},
-            {3, FVmeshMultiVertColor},
-            {4, drawGraph},
-            {5, FVmeshSingleColor},
-            {6, CamDistSetter}
+            {"VertexColorMesh", FVmeshVertexColor},
+            {"Scatter3D", scatter3},
+            {"MultiVertexColorMesh", FVmeshMultiVertColor},
+            {"Graph", drawGraph},
+            {"SingleColorMesh", FVmeshSingleColor},
+            {"SetCamDistance", CamDistSetter}
         };
     }
 
     public void UpdateMatlabFigure()
     {
-        MatReader matFileReader = new MatReader(Application.streamingAssetsPath + Path.DirectorySeparatorChar + fileSelectionDropDown.Text);
+        string _path = Application.streamingAssetsPath + Path.DirectorySeparatorChar + fileSelectionDropDown.Text; 
+        MatReader matFileReader = new MatReader(_path);
 
         MatNode matFile = matFileReader.Fields[matFileReader.FieldNames[0]];
 
         foreach (var field in matFile.Fields)
-        {
+        { 
             MatNode _struct = matFile.Fields[field.Key];
-            int _type = _struct.Fields["type"].GetValue<int[,]>()[0, 0];
+                // this is a bit of a silly workaround to get a string read in to be the key "_type", but using strings as keys for _matTypes is going to maake this whole script much more readable. 
+                // Accord throws an error if _struct is a Matlab struct with both numeric arrays and strings
+                // so type is a struct with one field. The field contains no data but the FieldName is the sting I am trying to pass. 
+            string _type = new List<string>(_struct.Fields["type"].Fields.Keys)[0]; 
+            _matTypes[_type](_struct);
 
-            _matTypes[_type](_struct); 
+            //MatFileReader hmm = new MatFileReader(_struct);
         }
     }
 
     // matType Functions
     private void FVmeshSingleColor(MatNode fv)
     {
-        GameObject meshInstance = BuilderFunctions.InstantiateMesh(fv, transform);
+        Vector3[] vertices = DataParser.MatrixToVectorArray(fv.Fields["vertices"].GetValue<double[,]>());
+        int[] faces = DataParser.MatrixTo1DArray(fv.Fields["faces"].GetValue<int[,]>());
 
-        BuilderFunctions.AddColor(fv, meshInstance, _singleColor, _opaqueSingleColor);
+        GameObject meshInstance = BuilderFunctions.InstantiateMesh(vertices, faces, transform);
+
+        Color color = ColorParser.GetColor(fv.Fields["color"].GetValue<double[,]>());
+
+        double[,] temp = fv.Fields["opacity"].GetValue<double[,]>();
+        float opacity = (float)temp[0, 0];
+
+        BuilderFunctions.AddMat(opacity, meshInstance, _singleColor, _opaqueSingleColor);
+        meshInstance.GetComponent<MeshRenderer>().material.SetColor("_color", color);
     }
 
     private void FVmeshVertexColor(MatNode fv)
     {
-        GameObject meshInstance = BuilderFunctions.InstantiateMesh(fv, transform);
+        Vector3[] vertices = DataParser.MatrixToVectorArray(fv.Fields["vertices"].GetValue<double[,]>());
+        int[] faces = DataParser.MatrixTo1DArray(fv.Fields["faces"].GetValue<int[,]>());
 
-        BuilderFunctions.AddColor(fv, meshInstance, _vertexColors, _opaqueVertexColors);
+        GameObject meshInstance = BuilderFunctions.InstantiateMesh(vertices, faces, transform);
 
-        meshInstance.GetComponent<MeshFilter>().mesh.colors = BuilderFunctions.BuildVertColorList(fv)[0]; 
+        double[,] temp = fv.Fields["opacity"].GetValue<double[,]>();
+        float opacity = (float)temp[0, 0];
+
+        BuilderFunctions.AddMat(opacity, meshInstance, _vertexColors, _opaqueVertexColors);
+
+        double[,] col = fv.Fields["colors"].GetValue<double[,]>();
+
+        List<Color[]> vertexColorList = ColorParser.GetVertexColorList(col, fv.Fields["map"].GetValue<double[,]>());
+        meshInstance.GetComponent<MeshFilter>().mesh.colors = vertexColorList[0]; 
     }
 
     private void FVmeshMultiVertColor(MatNode fv)
     {
-        GameObject meshInstance = BuilderFunctions.InstantiateMesh(fv, multiMeshContainer);
+        Vector3[] vertices = DataParser.MatrixToVectorArray(fv.Fields["vertices"].GetValue<double[,]>());
+        int[] faces = DataParser.MatrixTo1DArray(fv.Fields["faces"].GetValue<int[,]>());
 
-        List<Color[]> _multiVertColorList = BuilderFunctions.BuildVertColorList(fv);
+        GameObject meshInstance = BuilderFunctions.InstantiateMesh(vertices, faces, multiMeshContainer);
 
-        meshInstance.GetComponent<MeshFilter>().mesh.colors = _multiVertColorList[0]; 
+        double[,] col = fv.Fields["colors"].GetValue<double[,]>();
+        List<Color[]> _multiVertColorList = ColorParser.GetVertexColorList(col, fv.Fields["map"].GetValue<double[,]>());
+
+        meshInstance.GetComponent<MeshFilter>().mesh.colors = _multiVertColorList[0];
+
+        double[,] temp = fv.Fields["opacity"].GetValue<double[,]>();
+        float opacity = (float)temp[0, 0];
+
+        BuilderFunctions.AddMat(opacity, meshInstance, _vertexColors, _opaqueVertexColors);
 
         multiMeshContainer.GetComponent<MultiVertColUpdater>().SetStuff(_multiVertColorList, meshInstance); 
     }
@@ -84,7 +116,7 @@ public class MatlabReaderScript : MonoBehaviour
         GameObject scatterInstance = new GameObject("scatter3Container");
         scatterInstance.transform.parent = transform;
 
-        Vector3[] pts = DataParser.MatrixToVectorArray(sc.Fields["pts"].GetValue<double[,]>());
+        Vector3[] pts = DataParser.MatrixToVectorArray(sc.Fields["vertices"].GetValue<double[,]>());
         int[,] sz = sc.Fields["size"].GetValue<int[,]>();
 
         Color color = ColorParser.GetColor(sc.Fields["color"].GetValue<double[,]>());
@@ -107,12 +139,14 @@ public class MatlabReaderScript : MonoBehaviour
         double[,] x = gr.Fields["x"].GetValue<double[,]>();
         double[,] y = gr.Fields["y"].GetValue<double[,]>();
 
-        graphContainer.GetComponent<GraphController>().BuildGraph(x, y, color); 
+        List<Vector2[]> points = DataParser.buildPointsList(x, y); 
+
+        graphContainer.GetComponent<GraphController>().BuildGraph(points, color); 
     }
 
     private void CamDistSetter(MatNode d)
     {
-        int[,] _dist = d.Fields["CamDistance"].GetValue<int[,]>();
+        int[,] _dist = d.Fields["camDistance"].GetValue<int[,]>();
         CamOrbit.functions.SetCamDistance(_dist[0,0]);
     }
 }

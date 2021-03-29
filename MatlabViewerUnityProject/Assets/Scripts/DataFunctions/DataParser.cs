@@ -1,20 +1,25 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public static class DataParser
 {
-    public static int[] MatrixTo1DArray(int[,] matrix)
+    public static int[] MatrixTo1DArray(int[,] matrix) 
     {
         int[] arr = new int[matrix.Length];
         Vector3 temp = new Vector3(0, 0, 0);
-        for (int i = 0; i < matrix.GetLength(0); i++)
+
+        int nrows = matrix.GetLength(0); 
+        int ncols = matrix.GetLength(1); 
+
+        for (int i = 0; i < nrows; i++)
         {
-            arr[i * 3] = matrix[i, 0];
-            arr[i * 3 + 1] = matrix[i, 1];
-            arr[i * 3 + 2] = matrix[i, 2];
+            for (int j = 0; j < ncols; j ++)
+            {
+                arr[i * ncols + j] = matrix[i, j]; 
+            }
         }
         return (arr);
     }
-
     public static Vector3[] MatrixToVectorArray(double[,] matrix)
     {
         int rowCount = matrix.GetLength(0);
@@ -42,4 +47,23 @@ public static class DataParser
         }
         return column; 
     }
+
+    public static List<Vector2[]> buildPointsList(double[,] x, double[,] y)
+    {
+        List<Vector2[]> pointsList = new List<Vector2[]>(); 
+        for (int i = 0; i < y.GetLength(1); i++)
+        {
+            Vector2[] pointsArray = new Vector2[y.GetLength(0)];
+            for (int j = 0; j < y.GetLength(0); j++)
+            {
+                pointsArray[j].x = (float)x[j, 0];
+                pointsArray[j].y = (float)y[j, i];
+            }
+
+            pointsList.Add(pointsArray); 
+        }
+        
+        return pointsList;
+    }
+
 }

@@ -1,20 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections.Generic; 
-using Accord.IO; 
 
 public static class BuilderFunctions 
 {
-    public static Vector2[] buildPointsArray(double[,] x, double[,] y, int idx)
-    {
-        Vector2[] pointsArray = new Vector2[x.Length];
-        for (int i = 0; i < x.Length; i++)
-        {
-            pointsArray[i].x = (float)x[i, 0];
-            pointsArray[i].y = (float)y[i, idx];
-        }
-        return pointsArray;
-    }
-
     public static GameObject FVmesh(Vector3[] vertices, int[] faces)
     {
         Mesh mesh = new Mesh();
@@ -32,11 +19,8 @@ public static class BuilderFunctions
         return meshInstance; 
     }
 
-    public static GameObject InstantiateMesh(MatNode fv, Transform targetTransform)
+    public static GameObject InstantiateMesh(Vector3[] vertices, int[] faces, Transform targetTransform)
     {
-        Vector3[] vertices = DataParser.MatrixToVectorArray(fv.Fields["vertices"].GetValue<double[,]>());
-        int[] faces = DataParser.MatrixTo1DArray(fv.Fields["faces"].GetValue<int[,]>());
-
         GameObject meshInstance = BuilderFunctions.FVmesh(vertices, faces);
 
         meshInstance.transform.parent = targetTransform;
@@ -44,30 +28,16 @@ public static class BuilderFunctions
         return meshInstance;
     }
 
-    public static void AddColor(MatNode fv, GameObject meshInstance, Material transparentMat, Material opaqueMat)
+    public static void AddMat(float opacity, GameObject meshInstance, Material transparentMat, Material opaqueMat)
     {
-        double[,] temp = fv.Fields["opacity"].GetValue<double[,]>();
-        float _opacity = (float)temp[0, 0];
-
-        if (_opacity < 1f)
+        if (opacity < 1f)
         {
             meshInstance.GetComponent<MeshRenderer>().material = transparentMat;
-            meshInstance.GetComponent<MeshRenderer>().material.SetFloat("_opacity", _opacity);
+            meshInstance.GetComponent<MeshRenderer>().material.SetFloat("_opacity", opacity);
         }
         else
         {
             meshInstance.GetComponent<MeshRenderer>().material = opaqueMat;
         }
-
-        Color color = ColorParser.GetColor(fv.Fields["color"].GetValue<double[,]>());
-        meshInstance.GetComponent<MeshRenderer>().material.SetColor("_color", color);
-    }
-
-    public static List<Color[]> BuildVertColorList(MatNode fv)
-    {
-        double[,] col = fv.Fields["colors"].GetValue<double[,]>();
-        List<Color[]> vertexColorList = ColorParser.GetVertexColorList(col, fv.Fields["map"].GetValue<double[,]>());
-
-        return vertexColorList;
     }
 }

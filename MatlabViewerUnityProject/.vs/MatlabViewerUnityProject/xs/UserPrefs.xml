@@ -1,18 +1,21 @@
 ﻿<Properties StartupConfiguration="{04AA0A81-A556-0C5C-AA94-D6C15F51F8C7}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/DataFunctions/ColorParser.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/DataFunctions/DataParser.cs">
     <Files>
-      <File FileName="Assets/Scripts/MatlabReaderScript.cs" Line="58" Column="1" />
+      <File FileName="Assets/Scripts/MatlabReaderScript.cs" Line="60" Column="47" />
       <File FileName="Assets/Scripts/UpdateManger.cs" />
-      <File FileName="Assets/Scripts/DictTest.cs" Line="6" Column="1" />
+      <File FileName="Assets/Scripts/DictTest.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CamOrbit.cs" />
-      <File FileName="Assets/Scripts/DataFunctions/ColorParser.cs" Line="15" Column="1" NotebookId="1" />
-      <File FileName="Assets/Scripts/DataFunctions/BuilderFunctions.cs" Line="73" Column="2" NotebookId="1" />
-      <File FileName="Assets/Scripts/DataFunctions/DataParser.cs" Line="1" Column="1" NotebookId="1" />
+      <File FileName="Assets/Scripts/MultiVertColUpdater.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GraphController.cs" Line="31" Column="1" />
+      <File FileName="Assets/Scripts/DataFunctions/ColorParser.cs" Line="2" Column="1" NotebookId="1" />
+      <File FileName="Assets/Scripts/DataFunctions/BuilderFunctions.cs" Line="1" Column="19" NotebookId="1" />
+      <File FileName="Assets/Scripts/DataFunctions/DataParser.cs" Line="44" Column="24" NotebookId="1" />
+      <File FileName="Assets/Scripts/MatFileReader.cs" Line="80" Column="2" NotebookId="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="6590e4b1-9f9d-4aaf-8624-7ffde65fd101" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="6052999e-772c-49c8-9a0d-f22322df8a42" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

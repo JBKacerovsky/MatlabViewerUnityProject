@@ -6,44 +6,38 @@ using UnityEngine.UI;
 public class GraphController : MonoBehaviour
 {
     [SerializeField] private GameObject _graphPrefab; 
+    [SerializeField] private Slider slider;
 
-    [SerializeField] private Slider slider; 
-    [SerializeField] private List<UILineRenderer> graphList;
-    private List<double[,]> _graphXvalues;
-    private List<double[,]> _graphYvalues;
+    private List<UILineRenderer> _graphList = new List<UILineRenderer>();
+    private List<List<Vector2[]>> _graphPointsList = new List<List<Vector2[]>>(); 
 
-    public void BuildGraph(double[,] x, double[,] y, Color color)
+    public void BuildGraph(List<Vector2[]> points, Color color)
     {
-        graphList = new List<UILineRenderer>();
-        _graphXvalues = new List<double[,]>();
-        _graphYvalues = new List<double[,]>();
+        _graphList = new List<UILineRenderer>();
 
         GameObject _graph = Instantiate(_graphPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         UILineRenderer uILineRenderer = _graph.GetComponent<UILineRenderer>();
 
         _graph.transform.SetParent(transform, false);
 
-        Vector2[] points = BuilderFunctions.buildPointsArray(x, y, 0);
-
         uILineRenderer.color = color;
-        uILineRenderer.Points = points;
+        uILineRenderer.Points = points[0];
 
-        if (y.GetLength(1) > 1) // if graph has more than 1 set of y values it becomes scrollable
+        if (points.Count > 1)
         {
-            graphList.Add(uILineRenderer);
-            _graphXvalues.Add(x);
-            _graphYvalues.Add(y);
-        }
+            _graphList.Add(uILineRenderer);
+            _graphPointsList.Add(points); 
+        }        
     }
 
     public void UpdateGraph()
     {
         int idx = (int)slider.value;
-
-        for (int i = 0; i < graphList.Count; i++)
+        
+        for (int i = 0; i < _graphList.Count; i++)
         {
-            Vector2[] points = BuilderFunctions.buildPointsArray(_graphXvalues[i], _graphYvalues[i], idx);
-            graphList[i].Points = points;
+            Vector2[] points = _graphPointsList[i][idx];
+            _graphList[i].Points = points;
         }
     }
 }
