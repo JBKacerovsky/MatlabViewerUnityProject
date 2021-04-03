@@ -40,4 +40,16 @@ public static class BuilderFunctions
             meshInstance.GetComponent<MeshRenderer>().material = opaqueMat;
         }
     }
+        public static void SpawnScatterSpheres(GameObject scatterInstance, Vector3[] pts, int[] sz, Color color, Material material)
+    {
+        for (int i = 0; i < pts.GetLength(0); i++)
+        {
+            GameObject sp = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sp.transform.position = pts[i];
+            sp.transform.localScale = new Vector3(sz[i], sz[i], sz[i]);
+            sp.GetComponent<Renderer>().material = material;
+            sp.GetComponent<Renderer>().material.SetColor("_BaseColor", color);
+            sp.transform.parent = scatterInstance.transform;
+        }
+    }
 }

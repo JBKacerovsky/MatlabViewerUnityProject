@@ -1,8 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Accord.IO;
-using System;
+
+public class MatStruct
+{
+    public List<MatFileReader> MatFileList; 
+    public MatStruct(string _path)
+    {       
+        MatFileList = new List<MatFileReader>(); 
+        
+        MatReader inputMatReader = new MatReader(_path);
+
+        MatNode inputMatNode = inputMatReader.Fields[inputMatReader.FieldNames[0]];
+
+        foreach (var field in inputMatNode.Fields)
+        { 
+            MatNode _struct = inputMatNode.Fields[field.Key];
+            string _type = new List<string>(_struct.Fields["type"].Fields.Keys)[0];      // this is a bit of a silly workaround to get a string read in to be the key "_type", but using strings as keys for _matTypes is going to maake this whole script much more readable. Accord throws an error if _struct is a Matlab struct with both numeric arrays and strings so type is a struct with one field. The field contains no data but the FieldName is the sting I am trying to pass. 
+            MatFileList.Add(new MatFileReader(_struct));    // read all variables in this node and add to list
+        }
+    }
+}
 
 public class MatFileReader
 {
@@ -15,7 +33,6 @@ public class MatFileReader
     public int[] PointSize;
     public List<Vector2[]> GraphPointList; 
     public List<Color[]> VertColorList;
-
     public MatFileReader(MatNode matNode)
     {
         // this is a bit of a silly workaround to get a string read in to be the key "_type", but using strings as keys for _matTypes is going to maake this whole script much more readable. 
