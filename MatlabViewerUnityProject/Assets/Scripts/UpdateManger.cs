@@ -20,7 +20,7 @@ public class UpdateManger : MonoBehaviour
             ToInactivate[i].SetActive(false); 
         }
 
-        ToUpdate.GetComponent<MatlabReaderScript>().UpdateMatlabFigure();
+        ToUpdate.GetComponent<FigureManager>().UpdateMatlabFigure();
     }
 
     public void DestroyAllChildren(Transform doomed)
