@@ -2,10 +2,11 @@
 
 public class UpdateManger : MonoBehaviour
 {
+    // Resets the scene when the figure is updated
+    // called by pressing Update Figure Button
+    // Destroys all objects created for the current figure (children of the figure containers specified in Destruction)
+    // Inactivates UI elements of the current figure (in ToInactivate)
     public Transform[] Destruction;
-
-    public GameObject ToUpdate;
-
     public GameObject[] ToInactivate;
 
     public void UpdateButtonPressed()
@@ -19,10 +20,7 @@ public class UpdateManger : MonoBehaviour
         {
             ToInactivate[i].SetActive(false); 
         }
-
-        ToUpdate.GetComponent<FigureManager>().UpdateMatlabFigure();
     }
-
     public void DestroyAllChildren(Transform doomed)
     {
         foreach (Transform child in doomed)

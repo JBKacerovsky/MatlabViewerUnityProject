@@ -45,7 +45,6 @@
      <Compile Include="Assets\Scripts\GraphController.cs" />
      <Compile Include="Assets\Scripts\UIscripts\ToggleActive.cs" />
      <Compile Include="Assets\Scripts\DataFunctions\BuilderFunctions.cs" />
-     <Compile Include="Assets\Scripts\DataFunctions\ColorParser.cs" />
      <Compile Include="Assets\Scripts\UIscripts\DropDownManager.cs" />
      <Compile Include="Assets\Scripts\DataFunctions\FigureDataStruct.cs" />
      <Compile Include="Assets\Scripts\DataFunctions\DataParser.cs" />

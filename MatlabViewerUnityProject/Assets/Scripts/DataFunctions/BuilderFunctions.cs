@@ -2,6 +2,8 @@
 
 public static class BuilderFunctions 
 {
+    // BuilderFunctions contians the methods for building the specifed 3D objects from data stored in a Xfigure .mat file. 
+    // after the data has been read and stored in a FigureDataStruct object (using data format conversions in the DataParser class)
     public static GameObject FVmesh(Vector3[] vertices, int[] faces)
     {
         Mesh mesh = new Mesh();
@@ -22,9 +24,7 @@ public static class BuilderFunctions
     public static GameObject InstantiateMesh(Vector3[] vertices, int[] faces, Transform targetTransform)
     {
         GameObject meshInstance = BuilderFunctions.FVmesh(vertices, faces);
-
         meshInstance.transform.parent = targetTransform;
-
         return meshInstance;
     }
 
@@ -40,8 +40,11 @@ public static class BuilderFunctions
             meshInstance.GetComponent<MeshRenderer>().material = opaqueMat;
         }
     }
-        public static void SpawnScatterSpheres(GameObject scatterInstance, Vector3[] pts, int[] sz, Color color, Material material)
+        public static void SpawnScatterSpheres(Vector3[] pts, int[] sz, Color color, Material material, Transform transform)
     {
+        GameObject scatterInstance = new GameObject("scatter3Container");
+        scatterInstance.transform.parent = transform;
+
         for (int i = 0; i < pts.GetLength(0); i++)
         {
             GameObject sp = GameObject.CreatePrimitive(PrimitiveType.Sphere);

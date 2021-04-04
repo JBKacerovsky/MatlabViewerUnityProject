@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class GraphController : MonoBehaviour
 {
-    [SerializeField] private GameObject _graphPrefab; 
-    [SerializeField] private Slider slider;
+    [SerializeField] private GameObject _graphPrefab = default; 
+    [SerializeField] private Slider slider = default;
 
     private List<UILineRenderer> _graphList = new List<UILineRenderer>();
     private List<List<Vector2[]>> _graphPointsList = new List<List<Vector2[]>>(); 

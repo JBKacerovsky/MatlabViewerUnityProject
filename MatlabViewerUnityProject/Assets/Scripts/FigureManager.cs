@@ -4,16 +4,17 @@ using System.Collections.Generic;
 
 public class FigureManager : MonoBehaviour
 {
+    // FigureManager controls thee construction of 3D figures from the Xfigure file specified by the user through the UI
     public AutoCompleteComboBox fileSelectionDropDown;
     // materials
-    [SerializeField] private Material _opaqueSingleColor;
-    [SerializeField] private Material _singleColor;
-    [SerializeField] private Material _opaqueVertexColors;
-    [SerializeField] private Material _vertexColors;
-    [SerializeField] private Material _scatterMat;
+    [SerializeField] private Material _opaqueSingleColor = default;
+    [SerializeField] private Material _singleColor = default;
+    [SerializeField] private Material _opaqueVertexColors = default;
+    [SerializeField] private Material _vertexColors = default;
+    [SerializeField] private Material _scatterMat = default;
     // containers for created objects
-    [SerializeField] private Transform multiMeshContainer;
-    [SerializeField] GameObject graphContainer;
+    [SerializeField] private Transform multiMeshContainer = default;
+    [SerializeField] GameObject graphContainer = default;
     private Dictionary<string, System.Action<FigureDataStruct>> _matTypes;
 
     void Start()
@@ -61,9 +62,7 @@ public class FigureManager : MonoBehaviour
     }
     private void scatter3(FigureDataStruct sc)
     {
-        GameObject scatterInstance = new GameObject("scatter3Container");
-        scatterInstance.transform.parent = transform;
-        BuilderFunctions.SpawnScatterSpheres(scatterInstance, sc.Vertices, sc.PointSize, sc.SingleColor, _scatterMat);
+        BuilderFunctions.SpawnScatterSpheres(sc.Vertices, sc.PointSize, sc.SingleColor, _scatterMat, transform);
     }
     private void drawGraph(FigureDataStruct gr) => graphContainer.GetComponent<GraphController>().BuildGraph(gr.GraphPointList, gr.SingleColor);
     private void CamDistSetter(FigureDataStruct cd) => CamOrbit.functions.SetCamDistance(cd.CamDistance);

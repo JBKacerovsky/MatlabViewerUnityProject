@@ -8,7 +8,7 @@ public class FileListUpdater : MonoBehaviour
 {
     private string[] _files;
 
-    [SerializeField] private AutoCompleteComboBox fileSelectionDropDown;
+    [SerializeField] private AutoCompleteComboBox fileSelectionDropDown = default;
 
     private void Start()
     {
