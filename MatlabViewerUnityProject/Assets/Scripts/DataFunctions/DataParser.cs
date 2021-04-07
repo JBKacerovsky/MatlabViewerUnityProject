@@ -91,7 +91,6 @@ public static Color GetColor(double[,] col)
         {
             ColorList.Add(BuildColorArray(DataParser.getColumnDouble(colors, i), colMap));
         }
-
         return ColorList;
     }
     public static Gradient MatrixToColormap(double[,] matrix)
@@ -118,5 +117,9 @@ public static Color GetColor(double[,] col)
 
         map.SetKeys(colorKey, alphaKey);
         return (map);
+    }
+    public static string[] IntMatrixTo1DStringArray(int[,] matrix, string prefix = "", string suffix = "")
+    {
+        return (System.Array.ConvertAll(MatrixTo1DArray(matrix), x => prefix + x.ToString() + suffix)); 
     }
 }

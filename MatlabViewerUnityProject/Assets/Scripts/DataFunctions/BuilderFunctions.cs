@@ -14,17 +14,18 @@ public static class BuilderFunctions
 
         GameObject meshInstance = new GameObject();
         meshInstance.AddComponent<MeshRenderer>();
-        meshInstance.AddComponent<EmissionController>();
         meshInstance.AddComponent<MeshFilter>().sharedMesh = mesh;  //passing the mesh to the MeshFiltere so it can be displayed
         meshInstance.AddComponent<MeshCollider>().sharedMesh = mesh;  //adding _mesh to MeshCollider so it can be hit by raycasts (and do other collider physics)
-    
+
         return meshInstance; 
     }
 
-    public static GameObject InstantiateMesh(Vector3[] vertices, int[] faces, Transform targetTransform)
+    public static GameObject InstantiateMesh(Vector3[] vertices, int[] faces, Transform targetTransform, int shootability, int id)
     {
         GameObject meshInstance = BuilderFunctions.FVmesh(vertices, faces);
+        meshInstance.AddComponent<EmissionController>().SetShootability(shootability); 
         meshInstance.transform.parent = targetTransform;
+        meshInstance.name = "target_" + id.ToString(); 
         return meshInstance;
     }
 
@@ -40,7 +41,7 @@ public static class BuilderFunctions
             meshInstance.GetComponent<MeshRenderer>().material = opaqueMat;
         }
     }
-        public static void SpawnScatterSpheres(Vector3[] pts, int[] sz, Color color, Material material, Transform transform)
+        public static void SpawnScatterSpheres(Vector3[] pts, int[] sz, Color color, Material material, Transform transform, int[] shootability, int[] id)
     {
         GameObject scatterInstance = new GameObject("scatter3Container");
         scatterInstance.transform.parent = transform;
@@ -53,6 +54,8 @@ public static class BuilderFunctions
             sp.GetComponent<Renderer>().material = material;
             sp.GetComponent<Renderer>().material.SetColor("_BaseColor", color);
             sp.transform.parent = scatterInstance.transform;
+            sp.AddComponent<EmissionController>().SetShootability(shootability[i]); 
+            sp.name = "target_" + id[i].ToString(); 
         }
     }
 }

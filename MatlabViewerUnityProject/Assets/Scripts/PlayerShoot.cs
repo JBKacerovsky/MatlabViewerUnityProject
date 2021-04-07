@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
 {
@@ -23,7 +21,7 @@ public class PlayerShoot : MonoBehaviour
 	{
 		Vector3 rayOrigin = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.0f));
 
-        RaycastHit _hit;
+    	RaycastHit _hit;
 
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
@@ -31,8 +29,8 @@ public class PlayerShoot : MonoBehaviour
         {
             if (_hit.collider.tag == _shootableMesh)
             {
-                EmissionController HitSphereScript = _hit.transform.GetComponent<EmissionController>();
-				HitSphereScript.ToggleEmission();	
+				_hit.transform.GetComponent<EmissionController>().ToggleEmission();
+				ShootManagerScript.KeepShooting(_hit.collider.name); 
             }
         }
     }
