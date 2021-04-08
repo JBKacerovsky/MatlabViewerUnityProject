@@ -54,7 +54,7 @@ public class EmissionController : MonoBehaviour
         {
             fire = true;
         }
-        if (fire == true & Input.GetKeyUp(KeyCode.P))
+        if (fire == true & Input.GetKeyUp(KeyCode.N))
         {
             ShootManager.ShootInDirectConnections(transform.name);
             fire = false;
