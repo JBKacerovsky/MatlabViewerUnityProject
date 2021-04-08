@@ -50,7 +50,7 @@ public class EmissionController : MonoBehaviour
         // with only the first condition the next selected objects will also sometimes fire and select the next etc
         // presumably if their update is called slightly later in the framee they will already have emission== true and the key press is still active
         // this way only objects that had emission on when the key is pressed will pass their id to KeepShooting once the key is released (and since the emissions are only set after the key releease, the next elements cannot have emission == true and keyDown)
-        if (emission == true & Input.GetKeyDown(KeyCode.P))
+        if (emission == true & Input.GetKeyDown(KeyCode.N))
         {
             fire = true;
         }
