@@ -15,7 +15,6 @@ public class EmissionController : MonoBehaviour
         ConditionalResetAllEmmiters();
         ConditionalExpandShooting();
     }
-
     public void ToggleEmission()
     {
         emission = !emission;
@@ -57,7 +56,7 @@ public class EmissionController : MonoBehaviour
         }
         if (fire == true & Input.GetKeyUp(KeyCode.P))
         {
-            ShootManagerScript.KeepShooting(transform.name);
+            ShootManager.ShootInDirectConnections(transform.name);
             fire = false;
         }
     }

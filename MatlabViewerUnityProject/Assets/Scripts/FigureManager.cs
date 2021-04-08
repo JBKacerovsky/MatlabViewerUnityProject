@@ -27,7 +27,7 @@ public class FigureManager : MonoBehaviour
             {"Graph", drawGraph},
             {"SingleColorMesh", FVmeshSingleColor},
             {"SetCamDistance", CamDistSetter}, 
-            {"ShootConnections", HandleShootConnections}
+            {"ConnectionDictionary", HandleShootConnections}
         };
     }
 
@@ -64,5 +64,8 @@ public class FigureManager : MonoBehaviour
     private void scatter3(FigureDataStruct sc) => BuilderFunctions.SpawnScatterSpheres(sc.Vertices, sc.PointSize, sc.SingleColor, _scatterMat, transform, sc.shootability, sc.id);
     private void drawGraph(FigureDataStruct gr) => graphContainer.GetComponent<GraphController>().BuildGraph(gr.GraphPointList, gr.SingleColor);
     private void CamDistSetter(FigureDataStruct cd) => CamOrbit.functions.SetCamDistance(cd.CamDistance);
-    private void HandleShootConnections(FigureDataStruct d) => ShootManagerScript.ShootConnectionDict = d.ShootConnectionDict;
+    private void HandleShootConnections(FigureDataStruct d)
+    {
+        // do nothing. This void only exists to fit the dictionary pattern. 
+    }
 }

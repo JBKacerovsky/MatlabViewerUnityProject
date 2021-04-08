@@ -19,19 +19,13 @@ public class FigureDataStruct
     public List<Color[]> VertColorList;
     public int[] shootability; 
     public int[] id; 
-    public Dictionary<string, string[]> ShootConnectionDict; 
-
     public FigureDataStruct(MatNode matNode)
     {
        Type = new List<string>(matNode.Fields["type"].Fields.Keys)[0]; // type MUST be defined for every input object that is why it is the only one not in an if statement
 
-        if (Type == "ShootConnections")
+        if (Type == "ConnectionDictionary")
         {
-            ShootConnectionDict = new Dictionary<string, string[]>(); 
-            foreach (string target_id in matNode.Fields["Connections"].Fields.Keys)
-            {
-                ShootConnectionDict.Add(target_id, DataParser.IntMatrixTo1DStringArray(matNode.Fields["Connections"].Fields[target_id].GetValue<int[,]>(), prefix: "target_")); 
-            }
+            HandleConnectionDictionaries(matNode);
         }
 
         if (matNode.Fields.ContainsKey("vertices"))
@@ -86,6 +80,26 @@ public class FigureDataStruct
         if (matNode.Fields.ContainsKey("id"))
         {
             id = DataParser.MatrixTo1DArray(matNode.Fields["id"].GetValue<int[,]>()); 
+        }
+    }
+
+    private static void HandleConnectionDictionaries(MatNode matNode)
+    {
+        if (matNode.Fields.ContainsKey("DirectConnections"))
+        {
+            foreach (string target_id in matNode.Fields["DirectConnections"].Fields.Keys)
+            {
+                // is this efficient to add straight to the dictionary in ShootManager...?
+                // or would it be better to build a temp Dictionary here and add the whole dictionary to shootmanager...
+                ShootManager.DirectConnectionDictionary.Add(target_id, DataParser.IntMatrixTo1DStringArray(matNode.Fields["DirectConnections"].Fields[target_id].GetValue<int[,]>(), prefix: "target_"));
+            }
+        }
+        if (matNode.Fields.ContainsKey("IndirectConnections"))
+        {
+            foreach (string target_id in matNode.Fields["IndirectConnections"].Fields.Keys)
+            {
+                ShootManager.InDirectConnectionDictionary.Add(target_id, DataParser.IntMatrixTo1DStringArray(matNode.Fields["IndirectConnections"].Fields[target_id].GetValue<int[,]>(), prefix: "target_"));
+            }
         }
     }
 }
