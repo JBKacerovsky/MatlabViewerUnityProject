@@ -3740,7 +3740,7 @@ MonoBehaviour:
   _singleColor: {fileID: 2100000, guid: 9dd30e2cfba694cda9f62b71b247a750, type: 2}
   _opaqueVertexColors: {fileID: 2100000, guid: 70490e56b07634bb8a30ca6f87936432, type: 2}
   _vertexColors: {fileID: 2100000, guid: c29b09bf1b13548dfbbe8b922648814c, type: 2}
-  _scatterMat: {fileID: 2100000, guid: 881016f8cb6b84a6a9392eae2ead622a, type: 2}
+  _scatterMat: {fileID: 2100000, guid: 9dd30e2cfba694cda9f62b71b247a750, type: 2}
   multiMeshContainer: {fileID: 416277923}
   graphContainer: {fileID: 1494045502}
 --- !u!4 &1456518077
@@ -5261,7 +5261,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 408533406}
   m_HandleRect: {fileID: 408533405}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -5400,7 +5400,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   range: 50000
 --- !u!1 &2056390478
 GameObject:

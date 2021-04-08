@@ -20,6 +20,8 @@ public class UpdateManger : MonoBehaviour
         {
             ToInactivate[i].SetActive(false); 
         }
+
+        ShootManager.EmptyDictionaries(); 
     }
     public void DestroyAllChildren(Transform doomed)
     {

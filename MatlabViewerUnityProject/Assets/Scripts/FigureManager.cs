@@ -26,7 +26,8 @@ public class FigureManager : MonoBehaviour
             {"MultiVertexColorMesh", FVmeshMultiVertColor},
             {"Graph", drawGraph},
             {"SingleColorMesh", FVmeshSingleColor},
-            {"SetCamDistance", CamDistSetter}
+            {"SetCamDistance", CamDistSetter}, 
+            {"ConnectionDictionary", HandleShootConnections}
         };
     }
 
@@ -42,28 +43,29 @@ public class FigureManager : MonoBehaviour
     }
     private void FVmeshSingleColor(FigureDataStruct fv)
     {
-        GameObject meshInstance = BuilderFunctions.InstantiateMesh(fv.Vertices, fv.Faces, transform);
+        GameObject meshInstance = BuilderFunctions.InstantiateMesh(fv.Vertices, fv.Faces, transform, fv.shootability[0], fv.id[0]);
         BuilderFunctions.AddMat(fv.Opacity, meshInstance, _singleColor, _opaqueSingleColor);
         meshInstance.GetComponent<MeshRenderer>().material.SetColor("_color", fv.SingleColor);
     }
     private void FVmeshVertexColor(FigureDataStruct fv)
     {
-        GameObject meshInstance = BuilderFunctions.InstantiateMesh(fv.Vertices, fv.Faces, transform);
+        GameObject meshInstance = BuilderFunctions.InstantiateMesh(fv.Vertices, fv.Faces, transform, fv.shootability[0], fv.id[0]);
         BuilderFunctions.AddMat(fv.Opacity, meshInstance, _vertexColors, _opaqueVertexColors);
         meshInstance.GetComponent<MeshFilter>().mesh.colors = fv.VertColorList[0]; 
     }
     private void FVmeshMultiVertColor(FigureDataStruct fv)
     {
-        GameObject meshInstance = BuilderFunctions.InstantiateMesh(fv.Vertices, fv.Faces, multiMeshContainer);
+        GameObject meshInstance = BuilderFunctions.InstantiateMesh(fv.Vertices, fv.Faces, multiMeshContainer, fv.shootability[0], fv.id[0]);
         List<Color[]> _multiVertColorList = fv.VertColorList; 
         multiMeshContainer.GetComponent<MultiVertColUpdater>().SetStuff(_multiVertColorList, meshInstance); 
         meshInstance.GetComponent<MeshFilter>().mesh.colors = _multiVertColorList[0];
         BuilderFunctions.AddMat(fv.Opacity, meshInstance, _vertexColors, _opaqueVertexColors);
     }
-    private void scatter3(FigureDataStruct sc)
-    {
-        BuilderFunctions.SpawnScatterSpheres(sc.Vertices, sc.PointSize, sc.SingleColor, _scatterMat, transform);
-    }
+    private void scatter3(FigureDataStruct sc) => BuilderFunctions.SpawnScatterSpheres(sc.Vertices, sc.PointSize, sc.SingleColor, _scatterMat, transform, sc.shootability, sc.id);
     private void drawGraph(FigureDataStruct gr) => graphContainer.GetComponent<GraphController>().BuildGraph(gr.GraphPointList, gr.SingleColor);
     private void CamDistSetter(FigureDataStruct cd) => CamOrbit.functions.SetCamDistance(cd.CamDistance);
+    private void HandleShootConnections(FigureDataStruct d)
+    {
+        // do nothing. This void only exists to fit the dictionary pattern. 
+    }
 }
