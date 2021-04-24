@@ -11,7 +11,6 @@ public class FigureManager : MonoBehaviour
     [SerializeField] private Material _singleColor = default;
     [SerializeField] private Material _opaqueVertexColors = default;
     [SerializeField] private Material _vertexColors = default;
-    [SerializeField] private Material _scatterMat = default;
     // containers for created objects
     [SerializeField] private Transform multiMeshContainer = default;
     [SerializeField] GameObject graphContainer = default;
@@ -61,7 +60,7 @@ public class FigureManager : MonoBehaviour
         meshInstance.GetComponent<MeshFilter>().mesh.colors = _multiVertColorList[0];
         BuilderFunctions.AddMat(fv.Opacity, meshInstance, _vertexColors, _opaqueVertexColors);
     }
-    private void scatter3(FigureDataStruct sc) => BuilderFunctions.SpawnScatterSpheres(sc.Vertices, sc.PointSize, sc.SingleColor, _scatterMat, transform, sc.shootability, sc.id);
+    private void scatter3(FigureDataStruct sc) => BuilderFunctions.SpawnScatterSpheres(sc.Vertices, sc.PointSize, sc.SingleColor, _opaqueSingleColor, transform, sc.shootability, sc.id);
     private void drawGraph(FigureDataStruct gr) => graphContainer.GetComponent<GraphController>().BuildGraph(gr.GraphPointList, gr.SingleColor);
     private void CamDistSetter(FigureDataStruct cd) => CamOrbit.functions.SetCamDistance(cd.CamDistance);
     private void HandleShootConnections(FigureDataStruct d)

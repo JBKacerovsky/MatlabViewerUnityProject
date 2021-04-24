@@ -41,21 +41,29 @@ public static class BuilderFunctions
             meshInstance.GetComponent<MeshRenderer>().material = opaqueMat;
         }
     }
-        public static void SpawnScatterSpheres(Vector3[] pts, int[] sz, Color color, Material material, Transform transform, int[] shootability, int[] id)
+        public static void SpawnScatterSpheres(Vector3[] pts, int[] sz, Color color, Material mat, Transform transform, int[] shootability, int[] id)
     {
-        GameObject scatterInstance = new GameObject("scatter3Container");
-        scatterInstance.transform.parent = transform;
+        GameObject scatterContainer = new GameObject("scatter3Container");
+        scatterContainer.transform.parent = transform;
 
-        for (int i = 0; i < pts.GetLength(0); i++)
+        // build the first sphere 
+        // bby building once and instantiating after the execution time of this script is cut approximately in half. 
+        GameObject sp = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        sp.transform.position = pts[0];
+        sp.transform.localScale = new Vector3(sz[0], sz[0], sz[0]);
+        sp.GetComponent<Renderer>().material = mat;
+        sp.GetComponent<Renderer>().material.SetColor("_color", color);
+        sp.transform.parent = scatterContainer.transform;
+        sp.AddComponent<EmissionController>().SetShootability(shootability[0]); 
+        sp.name = "target_" + id[0].ToString(); 
+
+        for (int i = 1; i < pts.GetLength(0); i++)
         {
-            GameObject sp = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            sp.transform.position = pts[i];
-            sp.transform.localScale = new Vector3(sz[i], sz[i], sz[i]);
-            sp.GetComponent<Renderer>().material = material;
-            sp.GetComponent<Renderer>().material.SetColor("_BaseColor", color);
-            sp.transform.parent = scatterInstance.transform;
-            sp.AddComponent<EmissionController>().SetShootability(shootability[i]); 
-            sp.name = "target_" + id[i].ToString(); 
+            GameObject nsp = GameObject.Instantiate(sp); 
+            nsp.transform.localScale = new Vector3(sz[i], sz[i], sz[i]);
+            nsp.transform.position = pts[i];
+            nsp.name = "target_" + id[i].ToString(); 
+            nsp.transform.parent = scatterContainer.transform;
         }
     }
 }
