@@ -9,7 +9,6 @@ public static class DataParser
     public static int[] MatrixTo1DArray(int[,] matrix) 
     {
         int[] arr = new int[matrix.Length];
-        Vector3 temp = new Vector3(0, 0, 0);
         int nrows = matrix.GetLength(0); 
         int ncols = matrix.GetLength(1); 
 
@@ -17,11 +16,13 @@ public static class DataParser
         {
             for (int j = 0; j < ncols; j ++)
             {
-                arr[i * ncols + j] = matrix[i, j]; 
+                int tempInt = (int)matrix[i, j]; 
+                arr[i * ncols + j] = tempInt;
             }
         }
         return (arr);
     }
+
     public static Vector3[] MatrixToVectorArray(double[,] matrix)
     {
         int rowCount = matrix.GetLength(0);

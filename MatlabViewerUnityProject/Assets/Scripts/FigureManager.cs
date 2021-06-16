@@ -33,12 +33,12 @@ public class FigureManager : MonoBehaviour
     public void UpdateMatlabFigure()
     {
         string _path = Application.streamingAssetsPath + System.IO.Path.DirectorySeparatorChar + fileSelectionDropDown.Text;
-        List<FigureDataStruct> h2 = new FigureDataStructList(_path).DataStructList;
-        for (int i = 0; i < h2.Count; i ++)
+        List<FigureDataStruct> _figureDataList = new FigureDataStructList(_path).DataStructList;
+        for (int i = 0; i < _figureDataList.Count; i ++)
         {
-            FigureDataStruct temp = h2[i]; 
-            _matTypes[temp.Type](temp); 
-        }
+            FigureDataStruct _figureData = _figureDataList[i]; 
+            _matTypes[_figureData.Type](_figureData); 
+        }   
     }
     private void FVmeshSingleColor(FigureDataStruct fv)
     {

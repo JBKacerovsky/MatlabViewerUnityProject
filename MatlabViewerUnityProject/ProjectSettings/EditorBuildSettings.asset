@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/matViewer.unity
+    guid: e5b41e500a8af4ace84eeb7351b8d94a
   m_configObjects: {}

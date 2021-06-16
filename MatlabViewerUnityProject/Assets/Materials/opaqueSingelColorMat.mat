@@ -25,5 +25,5 @@ Material:
     - _opacity: 1
     - _smoothness: 0.5
     m_Colors:
-    - _color: {r: 0.20271248, g: 0, b: 1, a: 0}
+    - _color: {r: 1, g: 1, b: 0, a: 1}
   m_BuildTextureStacks: []

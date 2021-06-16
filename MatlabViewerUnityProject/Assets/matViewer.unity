@@ -2606,7 +2606,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 853716475}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
@@ -2620,7 +2620,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -505, y: -375.85645}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &853716480
@@ -2996,6 +2996,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1638454487}
         m_TargetAssemblyTypeName: UpdateManger, Assembly-CSharp
         m_MethodName: UpdateButtonPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1494045504}
+        m_TargetAssemblyTypeName: GraphController, Assembly-CSharp
+        m_MethodName: ResetGraphs
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3740,7 +3752,6 @@ MonoBehaviour:
   _singleColor: {fileID: 2100000, guid: 9dd30e2cfba694cda9f62b71b247a750, type: 2}
   _opaqueVertexColors: {fileID: 2100000, guid: 70490e56b07634bb8a30ca6f87936432, type: 2}
   _vertexColors: {fileID: 2100000, guid: c29b09bf1b13548dfbbe8b922648814c, type: 2}
-  _scatterMat: {fileID: 2100000, guid: 9dd30e2cfba694cda9f62b71b247a750, type: 2}
   multiMeshContainer: {fileID: 416277923}
   graphContainer: {fileID: 1494045502}
 --- !u!4 &1456518077

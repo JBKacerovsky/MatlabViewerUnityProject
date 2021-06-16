@@ -36,7 +36,7 @@ public class EmissionController : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("UnShootable"); 
         transform.tag = "UnShootableMesh";
     }
-        private void ConditionalResetAllEmmiters()
+    private void ConditionalResetAllEmmiters()
     {
         if (Input.GetKey(KeyCode.A) & Input.GetKey(KeyCode.E))
         {

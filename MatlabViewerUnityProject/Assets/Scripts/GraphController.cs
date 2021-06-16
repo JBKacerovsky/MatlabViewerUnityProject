@@ -8,13 +8,13 @@ public class GraphController : MonoBehaviour
     [SerializeField] private GameObject _graphPrefab = default; 
     [SerializeField] private Slider slider = default;
 
-    private List<UILineRenderer> _graphList = new List<UILineRenderer>();
+    // private List<UILineRenderer> _graphList = new List<UILineRenderer>();
+    private List<GameObject> _graphList = new List<GameObject>();
     private List<List<Vector2[]>> _graphPointsList = new List<List<Vector2[]>>(); 
+
 
     public void BuildGraph(List<Vector2[]> points, Color color)
     {
-        _graphList = new List<UILineRenderer>();
-
         GameObject _graph = Instantiate(_graphPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         UILineRenderer uILineRenderer = _graph.GetComponent<UILineRenderer>();
 
@@ -25,19 +25,30 @@ public class GraphController : MonoBehaviour
 
         if (points.Count > 1)
         {
-            _graphList.Add(uILineRenderer);
             _graphPointsList.Add(points); 
-        }        
+            _graphList.Add(_graph);
+        }  
     }
 
     public void UpdateGraph()
     {
         int idx = (int)slider.value;
-        
+
         for (int i = 0; i < _graphList.Count; i++)
         {
             Vector2[] points = _graphPointsList[i][idx];
-            _graphList[i].Points = points;
+            _graphList[i].GetComponent<UILineRenderer>().Points = points;
         }
+    }
+
+    public void ResetGraphs()
+    {
+        _graphList.Clear();
+        _graphPointsList.Clear();
+
+        // foreach (Transform child in transform)
+        // {
+        //     GameObject.Destroy(child.gameObject);
+        // }
     }
 }
