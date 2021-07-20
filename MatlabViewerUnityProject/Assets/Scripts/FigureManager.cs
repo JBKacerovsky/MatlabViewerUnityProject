@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class FigureManager : MonoBehaviour
 {
-    // FigureManager controls thee construction of 3D figures from the Xfigure file specified by the user through the UI
+    // FigureManager controls the construction of 3D figures from the Xfigure file specified by the user through the UI
     public AutoCompleteComboBox fileSelectionDropDown;
     // materials
     [SerializeField] private Material _opaqueSingleColor = default;

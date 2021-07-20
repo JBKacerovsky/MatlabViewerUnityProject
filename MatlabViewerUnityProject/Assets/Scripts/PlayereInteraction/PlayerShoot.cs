@@ -19,7 +19,7 @@ public class PlayerShoot : MonoBehaviour
 	}
 	void Shoot()
 	{
-		Vector3 rayOrigin = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.0f));
+		//Vector3 rayOrigin = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.0f));
 
     	RaycastHit _hit;
 

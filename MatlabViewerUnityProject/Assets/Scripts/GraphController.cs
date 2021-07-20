@@ -45,10 +45,5 @@ public class GraphController : MonoBehaviour
     {
         _graphList.Clear();
         _graphPointsList.Clear();
-
-        // foreach (Transform child in transform)
-        // {
-        //     GameObject.Destroy(child.gameObject);
-        // }
     }
 }
